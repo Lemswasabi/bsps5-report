@@ -1,0 +1,54 @@
+% corrected VD 81
+
+\subsubsection{FR01: Feature extraction of Filter Banks}\label{mfccs}~\\
+
+% introduction
+
+Before training end-to-end ASR model, audio data have to be preprocessed. The
+first task is to extract features from the data which describes natural language
+expressions and excludes background noises and emotions.\\
+
+% def of MFCCs
+
+% Filter banks are features widely used in ASR.  MFCCs were presented by Davis
+% and Mermelstein in the 1980s.~\cite{mfcc}\\
+
+To extract the Filter banks from the dataset, the following extraction steps
+have to be executed on a speech signal sampled at $16kHz$:\\
+
+\begin{enumerate}[label=\arabic*.]
+  \item Frame the signal into $25ms$ frames. The frame length of a $16kHz$
+    signal:
+  \begin{equation} 
+    0.025*16000 = 400 samples.
+  \end{equation}
+  With a frame step of $160\ samples$ or $10ms$, the frames overlap themselves,
+  such that the first frame containing $400\ samples$ starts at sample 0 and the
+  second frame starts at sample 160. This pattern repeats until the end of the
+  speech signal. If the audio file is not divisible by an even number, it is
+  padded by zeros.\\
+  \item For each frame calculate the periodogram estimate of the power spectrum.
+    To obtain the Discrete Fourier Transform (DFT) from the frame $i$, we
+    perform:
+    \begin{equation}
+      S_{i}(k) = \sum_{N}^{n=1}s_i(n)h(n)e^{-j2\pi kn/N}
+    \end{equation}
+    For each speech frame $s_{i}(n)$, the periodogram-based power spectral
+    estimate is calculated with:
+    \begin{equation}
+      P_{i}(k)=\frac{1}{N}{\mid{S_{i}(k)}\mid}^{2}
+    \end{equation}
+  This is called the Periodogram estimate of the power spectrum which identifies
+  for every frame which frequencies are present.\\
+  \item Apply the Mel filterbank to the power spectrum and sum the energy in
+    each filter. The Mel filterbank is a set of 26 triangular filters. The
+    filterbank energies are calculated by multiplying every filterbank with the
+    power spectrum.\\
+  % \item Take the logarithm of the 26 filterbank energies.\\
+  % \item Take the Discrete Cosine Transform (DCT) of the 26 log filterbank
+  %   energies resulting in 26 cepstral coefficients. We only used the lower 12-13
+  %   of the 26 coefficients for ASR.\\
+\end{enumerate}
+
+% In Section~\ref{librosa} we will use the Python library \textit{Librosa} to
+% extract the MFCCs features from the dataset.

@@ -1,0 +1,25 @@
+% corrected LN 83
+
+\subsubsection{FR02: Luxembourgish dataset collection}\label{datasetlux}~\\
+
+To collect the Luxembourgish dataset, the \textit{Teachable
+Machine}\cite{teachablemachine} was used. It contains a recorder to create a
+dataset consisting of audio files. The recording of the audio files can be set
+to $1s$. However, the recorder saves the files in the \textit{.webm} file type.
+Therefore, the audio files have to be converted to \textit{.wav} files before
+the features can be extracted. The following bash script using the
+\textit{ffmpeg} command converts the audio files in a file directory to the
+desired file format:
+
+\newpage
+
+\lstset{
+  language = Bash,
+  literate = {\#\#}{{{\#\#}}}2,
+  columns  = fullflexible,
+  keepspaces,
+}
+
+% \newpage
+
+\lstinputlisting[language=Bash]{sections/technical/fr2/ffmpeg.sh}

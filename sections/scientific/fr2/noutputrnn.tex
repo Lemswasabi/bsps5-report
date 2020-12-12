@@ -1,0 +1,74 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+
+    % nodes
+
+    \node[inputNode, minimum size=2.5em] (x0) at (-5,-1.5) {$\tiny x$};
+    \node[inputNode, minimum size=2.5em] (h) at (-5,0) {$\tiny h$};
+    \node[inputNode, minimum size=2.5em] (o0) at (-5,1.5) {$\tiny o$};
+    \node[inputNode, minimum size=2.5em] (l0) at (-5,3) {$\tiny L$};
+    \node[inputNode, minimum size=2.5em] (y0) at (-5,4.5) {$\tiny y$};
+
+
+
+    \node[inputNode, dashed, minimum size=2.5em] (s0) at (-3,0) {$\tiny h_{\dots}$};
+
+    \node[inputNode, minimum size=2.5em] (x1) at (-1.5,-1.5) {$\tiny x_{t-1}$};
+    \node[inputNode, minimum size=2.5em] (s1) at (-1.5,0) {$\tiny h_{t-1}$};
+    \node[inputNode, minimum size=2.5em] (o1) at (-1.5,1.5) {$\tiny o$};
+    \node[inputNode, minimum size=2.5em] (l1) at (-1.5,3) {$\tiny L$};
+    \node[inputNode, minimum size=2.5em] (y1) at (-1.5,4.5) {$\tiny y$};
+
+    \node[inputNode, minimum size=2.5em] (x2) at (0,-1.5) {$\tiny x_{t}$};
+    \node[inputNode, minimum size=2.5em] (s2) at (0,0) {$\tiny h_{t}$};
+    \node[inputNode, minimum size=2.5em] (o2) at (0,1.5) {$\tiny o$};
+    \node[inputNode, minimum size=2.5em] (l2) at (0,3) {$\tiny L$};
+    \node[inputNode, minimum size=2.5em] (y2) at (0,4.5) {$\tiny y$};
+
+    \node[inputNode, minimum size=2.5em] (x3) at (1.5,-1.5) {$\tiny x_{t+1}$};
+    \node[inputNode, minimum size=2.5em] (s3) at (1.5,0) {$\tiny h_{t+1}$};
+    \node[inputNode, minimum size=2.5em] (o3) at (1.5,1.5) {$\tiny o$};
+    \node[inputNode, minimum size=2.5em] (l3) at (1.5,3) {$\tiny L$};
+    \node[inputNode, minimum size=2.5em] (y3) at (1.5,4.5) {$\tiny y$};
+
+    \node[inputNode, dashed, minimum size=2.5em] (s4) at (3,0) {$\tiny h_{\dots}$};
+
+    
+    % transition
+
+    \draw[stateTransition] (x0) -- (h);
+    \draw[thick, ->, loop right] (h) to node[below] {$f$} (h);
+
+    \draw[stateTransition] (-4,1) -- node[above] {unfold} (-3.5,1);
+
+    % \draw[stateTransition] (s0) -- node[above] {$f$} (s1);
+    \draw[stateTransition] (s0) -- node[above] {$W$} (s1);
+    \draw[stateTransition] (s1) -- node[above] {$W$} (s2);
+    \draw[stateTransition] (s2) -- node[above] {$W$} (s3);
+    \draw[stateTransition] (s3) -- node[above] {$W$} (s4);
+    \draw[stateTransition] (o0) -- (l0);
+    \draw[stateTransition] (y0) -- (l0);
+    \draw[stateTransition] (o1) -- (l1);
+    \draw[stateTransition] (y1) -- (l1);
+    \draw[stateTransition] (o2) -- (l2);
+    \draw[stateTransition] (y2) -- (l2);
+    \draw[stateTransition] (o3) -- (l3);
+    \draw[stateTransition] (y3) -- (l3);
+    \draw[stateTransition] (x1) -- node[right] {$U$} (s1);
+    \draw[stateTransition] (x2) -- node[right] {$U$} (s2);
+    \draw[stateTransition] (x3) -- node[right] {$U$} (s3);
+    \draw[stateTransition] (h) -- node[right] {$V$} (o0);
+    \draw[stateTransition] (s1) -- node[right] {$V$} (o1);
+    \draw[stateTransition] (s2) -- node[right] {$V$} (o2);
+    \draw[stateTransition] (s3) -- node[right] {$V$} (o3);
+
+  \end{tikzpicture}
+  \caption{This computational graph is for calculating the training loss of an
+    RNN which labels a sequence of input values $x$ to corresponding output
+    values $o$. A loss function $L$ is calculating the distance from $o$ to the
+    corresponding target $y$. On the left, the network is represented as a
+  recurrent graph. On the right, the same network is unfolded as a computational
+graph.~\cite{Goodfellow-et-al-2016}}
+  \label{noutputrnn}
+\end{figure}

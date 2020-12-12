@@ -1,0 +1,94 @@
+% corrected VD 81
+
+\subsubsection{Recurrent Neural Network}~\\
+
+%introduction
+
+Recurrent Neural Networks (RNNs) are a particular architecture of ANNs which can
+process sequential data $S = x_{1},\dots,x_{n}$. In traditional ANN the input
+and output data are assumed to be independent. However, for sequential data,
+this is usually not the case. For example, the prediction of the next word in a
+sentence is dependent on the words that appeared before. As opposed to MLP, RNN
+feeds back their outputs back to their network and thus gain an overview of past
+inputs. To explain how RNNs are implemented, we have to introduce the notion of
+computational graphs. A computational graph is a formal structure representing a
+set of computations. We obtain a chain of events by unfolding a recurrent
+computation into a computational graph with a repetitive structure. \\
+
+Consider a recurrent system,
+\begin{equation}
+  s_{t} = f(s_{t-1};\theta)
+\end{equation}
+with $s$ being the state of the system. The graph can be unfolded considering
+the time step $t = 3$, we have,
+\begin{equation}
+  \begin{split}
+    s_{3} & = f(s_{2};\theta) \\
+          & = f(f(s_{1};\theta);\theta)
+  \end{split}
+  \label{recurrentsystem}
+\end{equation}
+This expression can be illustrated by a directed acyclic computational graph, as
+shown in Figure~\ref{dag}\\
+\input{sections/scientific/fr2/DAG.tex}
+
+Now we consider the recurrent system accepting an external signal $\bm{x}_{t}$,
+\begin{equation}
+  s^{t} = f(s^{t-1},\bm{x}_{t};\theta)
+  \label{eqaccepting}
+\end{equation}
+where the state $s$ is containing information about the past sequence $S$. The
+hidden units can be described with equation~\ref{eqaccepting} using $\bm{h}$ to
+denote the state,
+\begin{equation}
+  \bm{h}_{t} = f(\bm{h}_{t-1},\bm{x}_{t};\theta)
+\end{equation}
+represented in Figure~\ref{unfoldrnnaccepting}.\\
+\input{sections/scientific/fr2/unfoldrnnaccepting.tex}
+
+%math
+
+With graph unfolding, we can now present some common examples of an RNN. Here are
+some important designs of RNNs:\\
+
+\begin{itemize}
+  \item RNNs which take a single input and produce an output at every time step
+    $t$. This is called a one-to-many RNN.\\
+  \item RNNs which read an entire data sequence and produce a data sequence.
+    This is called a many-to-many RNN.\\
+  \item RNNs which are connected recurrently between hidden units, read an
+    entire data sequence $S$ and produce only one single output. This is called
+    a many-to-one RNN.\\
+\end{itemize}
+
+\input{sections/scientific/fr2/noutputrnn.tex}
+
+We pick the RNN represented in Figure~\ref{noutputrnn} to develop forward
+propagation equations. This RNN takes in a data sequence $S$ and outputs for
+every time step $t$ an output. In this figure, we didn't include an
+activation function for the hidden units $h$. However, for the equations, we
+assume the activation function $\mathcal{H}$ to be the hyperbolic tangent.\\
+
+Let $h_{0}$ be the initial state. For every time step from $t = 1$ to $t =
+n$, we apply the following equations:
+\begin{align}
+  \bm{a}_{t} & = \bm{b} + \bm{Wh}_{t-1} + \bm{Ux}_{t} \\
+  \bm{h}_{t} & = \tanh(\bm{a}_{t}) \\
+  \bm{o}_{t} & = \bm c + \bm{Vh}_{t} \\
+  \bm{\hat y}_{t} & = softmax(\bm o_{t})
+\end{align}
+where $\bm b$ and $\bm c$ are the bias vectors and $\bm U$, $\bm V$ and $\bm W$ are
+the weight matrices.\\
+
+%problem
+
+\textbf{The Challenge of Long-Term Dependencies.} The challenge of learning
+long-term dependencies is that gradients, propagated through a very deep RNN,
+can vanish or explode. Gradients can vanish when the gradients are converging to
+$0$ and therefore the weights won't be updated while learning. Exploding
+gradients happen if the gradients are too large and the loss function will never
+reach the optimized minimum. As a solution to the challenges of RNNs, effective
+sequence models used in practice are called gated RNNs. These include the long
+short-term memory (LSTM) and the gated recurrent unit (GRU) based RNNs. Gated
+RNNs are based on the idea of creating paths through time that have gradients
+that neither vanish nor explode.\cite{doi:10.1162/neco.1997.9.8.1735}~\\

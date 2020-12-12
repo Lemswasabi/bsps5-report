@@ -1,0 +1,19 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+    \node[inputNode, dashed, minimum size=3em] (s0) at (-3,0) {$\tiny h_{\dots}$};
+    \node[inputNode, minimum size=3em] (s1) at (-1.5,0) {$\tiny h_{t-1}$};
+    \node[inputNode, minimum size=3em] (s2) at (0,0) {$\tiny h_{t}$};
+    \node[inputNode, minimum size=3em] (s3) at (1.5,0) {$\tiny h_{t+1}$};
+    \node[inputNode, dashed, minimum size=3em] (s4) at (3,0) {$\tiny h_{\dots}$};
+    
+    \draw[stateTransition] (s0) -- node[above] {$f$} (s1);
+    \draw[stateTransition] (s0) -- node[above] {$f$} (s1);
+    \draw[stateTransition] (s1) -- node[above] {$f$} (s2);
+    \draw[stateTransition] (s2) -- node[above] {$f$} (s3);
+    \draw[stateTransition] (s3) -- node[above] {$f$} (s4);
+
+  \end{tikzpicture}
+  \caption{The recurrent system described by equation \ref{recurrentsystem}, illustrated as an unfolded computational graph.}
+  \label{dag}
+\end{figure}

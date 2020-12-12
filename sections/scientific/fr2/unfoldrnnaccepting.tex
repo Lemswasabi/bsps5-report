@@ -1,0 +1,33 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+
+    \node[inputNode, minimum size=3em] (h) at (-5,0) {$\tiny h$};
+    \node[inputNode, minimum size=3em] (x) at (-5,-1.5) {$\tiny x$};
+    \node[inputNode, dashed, minimum size=3em] (s0) at (-3,0) {$\tiny h_{\dots}$};
+    \node[inputNode, minimum size=3em] (s1) at (-1.5,0) {$\tiny h_{t-1}$};
+    \node[inputNode, minimum size=3em] (s2) at (0,0) {$\tiny h_{t}$};
+    \node[inputNode, minimum size=3em] (s3) at (1.5,0) {$\tiny h_{t+1}$};
+    \node[inputNode, dashed, minimum size=3em] (s4) at (3,0) {$\tiny h_{\dots}$};
+    \node[inputNode, minimum size=3em] (x1) at (-1.5,-1.5) {$\tiny x_{t-1}$};
+    \node[inputNode, minimum size=3em] (x2) at (0,-1.5) {$\tiny x_{t}$};
+    \node[inputNode, minimum size=3em] (x3) at (1.5,-1.5) {$\tiny x_{t+1}$};
+    
+    \draw[stateTransition] (x) -- (h);
+    \draw[thick, ->, loop right] (h) to node[below] {$f$} (h);
+    \draw[stateTransition] (-4,-1) -- node[above] {Unfold} (-3.5,-1);
+    \draw[stateTransition] (s0) -- node[above] {$f$} (s1);
+    \draw[stateTransition] (s0) -- node[above] {$f$} (s1);
+    \draw[stateTransition] (s1) -- node[above] {$f$} (s2);
+    \draw[stateTransition] (s2) -- node[above] {$f$} (s3);
+    \draw[stateTransition] (s3) -- node[above] {$f$} (s4);
+    \draw[stateTransition] (x1) -- (s1);
+    \draw[stateTransition] (x2) -- (s2);
+    \draw[stateTransition] (x3) -- (s3);
+
+  \end{tikzpicture}
+  \caption{RNN with no outputs, it processes the input $x$ and passes it into
+  the state $h$ which is then passed through time. On the right graph, the same
+network is unfolded as a computational graph.~\cite{Goodfellow-et-al-2016}}
+  \label{unfoldrnnaccepting}
+\end{figure}

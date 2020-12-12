@@ -1,0 +1,29 @@
+% corrected VD 85
+
+\subsubsection{Long short-term memory}~\\
+
+
+An LSTM unit is composed of a memory cell, an input gate, an output gate and a
+forget gate. The cell stores information over a long period and the three gates
+control the flow of information through the cell. RNNs using LSTM units deal
+with the vanishing gradient problem because these units allow gradients to flow
+unchanged.\cite{doi:10.1162/neco.1997.9.8.1735}\\
+
+The standard formulation of a single LSTM cell can be given by the following
+equations:
+
+\begin{align}
+  f_t &= \sigma(W_f h_{t-1}+V_f x_t+b_f)\\
+  i_t &= \sigma(W_i h_{t-1}+V_i x_t+b_i)\\
+  C_t^{'} &= \tanh(W_C h_{t-1}+V_C x_t+b_C)\\
+  C_t &= f_t C_{t-1}+i_t C_t^{'}\\
+  o_t &= \sigma(W_o h_{t-1}+V_o x_t+b_o)\\
+  h_t &= o_t \tanh(C_t)
+\end{align}
+
+where $\sigma$ is the sigmoid function, $\tanh$ is the hyperbolic tangent
+function, $f,i,C^{'},C,o$ are the forget gate, input gate, new memory cell
+content, and memory cell content, output gate respectively. See representation
+of an LSTM cell in Figure~\ref{memorycell}.
+
+\input{sections/scientific/fr2/lstmcell.tex}

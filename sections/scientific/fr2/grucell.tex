@@ -1,0 +1,92 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}[
+    % GLOBAL CFG
+    font=\sf \scriptsize,
+    >=LaTeX,
+    % Styles
+    cell/.style={% For the main box
+        rectangle, 
+        rounded corners=5mm, 
+        draw,
+        very thick,
+        },
+    operator/.style={%For operators like +  and  x
+        circle,
+        draw,
+        inner sep=-0.5pt,
+        minimum height =.2cm,
+        },
+    function/.style={%For functions
+        ellipse,
+        draw,
+        inner sep=1pt
+        },
+    ct/.style={% For external inputs and outputs
+        circle,
+        draw,
+        line width = .75pt,
+        minimum width=1cm,
+        inner sep=1pt,
+        },
+    gt/.style={% For internal inputs
+        rectangle,
+        draw,
+        minimum width=4mm,
+        minimum height=3mm,
+        inner sep=1pt
+        },
+    mylabel/.style={% something new that I have learned
+        font=\scriptsize\sffamily
+        },
+    ArrowC1/.style={% Arrows with rounded corners
+        rounded corners=.25cm,
+        thick,
+        },
+    ArrowC2/.style={% Arrows with big rounded corners
+        rounded corners=.5cm,
+        thick,
+        },
+    ]
+
+    % Draw the cell: 
+    \node [cell, minimum height =4cm, minimum width=6cm] at (0,0){} ;
+
+    % Draw inputs named ibox#
+    \node [gt] (ibox1) at (-0.2,-0.75) {$\sigma$};
+    \node [gt] (ibox2) at (0.5,-0.75) {$\sigma$};
+    \node [gt, minimum width=1cm] (ibox3) at (1.5,-0.75) {$\tanh$};
+
+   % Draw opérators   named mux# , add# and func#
+    \node [operator] (mux1) at (-1,0) {$\times$};
+    \node [operator] (mux2) at (0.5,1.5) {$\times$};
+    \node [operator] (add1) at (1.5,1.5) {+};
+    \node [operator] (-1) at (0.5,0.5) {$1-$};
+    \node [operator] (mux3) at (1.5,0) {$\times$};
+
+    \node[ct, label={[mylabel]}] (h0) at (-4,1.5) {$h_{t-1}$};
+    \node[ct, label={[mylabel]}] (h1) at (4,1.5) {$h_{t}$};
+    \node[ct, label={[mylabel]}] (x) at (-2,-3) {$x_t$};
+
+    % Start connecting all.
+    \draw [ArrowC1] (h0) -- (mux2) -- (add1) -- (h1);
+    \draw [->, ArrowC1] (ibox2) -- (-1) -- (mux2);
+    \draw [->, ArrowC1] (ibox3) -- (mux3) -- (add1);
+
+    % Inputs
+    \draw [ArrowC1] (h0) -| (mux1) -- (mux1 |- 0,-1.5)-| (ibox3);
+    \draw [ArrowC1] (h0) -| (-2,-1.25) -- (mux1 |- 0,-1.25)-| (ibox2);
+    \draw [ArrowC1] (x) -- (x |- 0,-1.25)-| (ibox1);
+    \draw [ArrowC1] (x) -- (x |- 0,-1.25)-| (ibox2);
+    \draw [ArrowC1] (x) -- (x |- 0,-1.5)-| (ibox3);
+    \draw [ArrowC1] (ibox3) -- node[right] {$\tilde{h}_t$} (mux3);
+    \draw [ArrowC1] (ibox2) -- node[right, yshift=-2mm] {${z}_t$} (-1);
+
+    % Internal
+    \draw [->, ArrowC2] (ibox1) |- node[right,xshift=-2mm] {$r_t$} (mux1);
+    \draw [->, ArrowC2] (ibox2) |- (mux3);
+
+  \end{tikzpicture}
+  \caption{GRU unit.}
+  \label{grucell}
+\end{figure}

@@ -1,0 +1,13 @@
+\begin{figure}[h]
+  \centering
+  \begin{tikzpicture}
+      \begin{axis}[
+          domain=-5:5,
+          ylabel={$g(z) = \max\{0,z\}$}
+          ]
+          \addplot+[mark=none,blue,domain=-5:0] {0};
+          \addplot+[mark=none,blue,domain=0:5] {x};
+      \end{axis}
+  \end{tikzpicture}
+  \caption{The rectified linear activation function.}
+\end{figure}
