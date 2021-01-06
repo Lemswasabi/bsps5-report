@@ -1,29 +1,11 @@
-%corrected
+% corrected LN 97
 
 \subsection{Constraints}
 
-For this BSP, we set the different constraints for the speech data set and the LAS model implementation.\\
+For this BSP, we set different constraints for the speech data set and the LAS model implementation.\\
 
-% , for the speech
-% recognition, for the Luxembourgish vocal dataset and the classification model's
-% implementation.\\
+\textbf{Data set.} This project does not focus on the collection of a data set. The focus lies on training our model on the LibriSpeech corpus which is an English data set containing approximately 1000 hours of read English speech. This data set is gathered from read audiobooks from the LibriVox project. ~\cite{panayotov2015librispeech}\\
 
-\textbf{Data set.} This project does not focus on collection of a data set.  we
-focus on training our model on a dataset containing English spoken
-numbers.~\cite{DBLP:journals/corr/abs-1804-03209}
+\textbf{LAS implementation.} We do not implement the LAS architecture from the ground up since various implementation already exists. Therefore, the focus will lie on choosing a mature existing implementation, explaining its structure and how to use it efficiently for our benchmark.\\
 
-\textbf{ANNs implementation.} We do not implement the Artificial Neural Networks
-architecture since existing deep learning libraries such as Keras are already
-matured. Thereby, we focus on explaining how the APIs work and how to use them
-efficiently in our model.
-
-% %reference paper
-
-% \textbf{Speech recognition.} Since no datasets with continuous sentences of the
-% Luxembourgish Language exists, we choose to work with isolated word recognition
-% instead of continuous speech recognition. In isolated word recognition, words are
-% separated by pauses.\\
-
-% \textbf{Speaker dependency.} To simplify the collection of the Luxembourgish
-% dataset, we collect the audio recordings from one person which makes the
-% isolated word recognition speaker-dependent.\\
+% \textbf{End-to-end ASR pipeline.} The final

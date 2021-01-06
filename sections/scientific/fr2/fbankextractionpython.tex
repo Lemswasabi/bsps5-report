@@ -1,0 +1,45 @@
+% corrected VD 78
+
+\subsubsection{Mel Filterbank feature extraction in Python}~\label{torchaudio}~\\
+
+We use the Pytorch module \textit{Torchaudio}\cite{torchaudio} to extract the Mel Filterbanks from the dataset. Instead of processing the whole dataset, the following steps are applied to one single audio file $f$.\\
+
+\begin{enumerate}[label=\arabic*.]
+  \item Let $f$ be an audio file sampled at $16kHz$, \textit{Torchaudio} loads the song as follows:
+\begin{lstlisting}
+import torchaudio
+import torchaudio.compliance.kaldi.fbank as fbank
+
+waveform, sr = torchaudio.load(filepath)
+\end{lstlisting}
+with $waveform$ being the audio time series and $sr$ the sample rate of $waveform$.\\
+
+% \item The next step is to pad the time series $y$ if it is smaller than $1s$:
+% \begin{lstlisting}
+% import numpy as np
+
+% if y.size < 16000:
+%   rest = 16000 - y.size
+%   left = rest // 2
+%   right = rest - left
+%   y = np.pad(y, (left, right), 'reflect'))
+% \end{lstlisting}
+% The time series is reflected on both sides to get the correct size.\\
+
+\item The Mel Filterbanks can be extracted with:
+\begin{lstlisting}
+filterbank = fbank(waveform, num_mel_bins=40, channel=-1, sample_frequency=sample_rate)
+\end{lstlisting}
+The function \textit{fbank()} returns a \textit{torch.Tensor} with the dimension:
+\begin{equation*}
+  shape=(padded\_window\_size // 2 + 1, \ m) 
+\end{equation*}
+with $padded\_window\_size // 2 + 1$ being the number of frames and $m$ the number of Mel-filters.
+\item The last step is to flatten this matrix to a vector which can be stored in a data frame for later training.
+\begin{lstlisting}
+row = filterbank.transpose(0, 1).unsqueeze(0).detach()
+\end{lstlisting}
+The matrix $filterbank$ is transposed and flattened. This concatenates the columns of $filterbank$ together forming a vector.
+\end{enumerate}
+
+% These steps are then applied to the entire dataset. Each computed vector is appended to the data frame which is going to be stored as a $.csv$ file. The entire code snippet is given in the Appendix in Figure~\ref{mfccsnip}.
