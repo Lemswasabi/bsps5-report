@@ -1,4 +1,4 @@
-% corrected VD 78
+% corrected LN 100
 
 \subsubsection{Mel Filterbank feature extraction in Python}~\label{torchaudio}~\\
 
@@ -39,7 +39,7 @@ with $padded\_window\_size // 2 + 1$ being the number of frames and $m$ the numb
 \begin{lstlisting}
 row = filterbank.transpose(0, 1).unsqueeze(0).detach()
 \end{lstlisting}
-The matrix $filterbank$ is transposed and flattened. This concatenates the columns of $filterbank$ together forming a vector.
+After this operation, the matrix $filterbank$ is transposed and flattened. This concatenates the columns of $filterbank$ together forming a vector.
 \end{enumerate}
 
 % These steps are then applied to the entire dataset. Each computed vector is appended to the data frame which is going to be stored as a $.csv$ file. The entire code snippet is given in the Appendix in Figure~\ref{mfccsnip}.
