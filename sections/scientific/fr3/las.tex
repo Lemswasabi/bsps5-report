@@ -1,0 +1,29 @@
+\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.}
+
+\paragraph{Introduction}
+
+In this section, the \textit{Listen, Attend and Spell} (LAS) model will be investigated and presented based on its paper\cite{chan2015listen}. LAS is a model which takes acoustic features as inputs and outputs characters as outputs. We define, $x \ = \ (x_1,...,x_T)$ an input sequence containing Mel-filterbank features and $y \ = \ (\langle sos\rangle,y_1,...,y_S,\langle eos\rangle)$ an ouput sequence of characters where $y_i \in \{a,b,...,z,0,...,9,\langle \ \rangle,\langle ,\rangle,\langle .\rangle,\langle '\rangle\}$. The tokens $\langle sos\rangle$ and $\langle eos\rangle$ represent the start and end of a sentence respectively. The LAS model represents a conditional distribution over previous characters $y_j$ where $j < i$ and the input signal $x$ for each output character $y_i$. Using the chaing rule, we get:
+
+\begin{equation}
+	P(y|x) = \prod_{i} P(y_i|x,y_j)
+\end{equation}
+
+This model is composes of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher level feature representation $h$. Whereas the speller module processes $h$ as input and computes a propability distribution over a sequence of characters. A representation of the LAS model with these two modules are given in Fig. \ref{las_model}.
+
+\begin{align}
+	h &= Listen(x)\\
+	P(y|x) &= AttendAndSpell(h,y)
+\end{align}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.18]{las_architecture.jpg}
+	\caption{Representation of Listen, Attend and Spell (LAS) model.\cite{las_model} The listener, a pyramidel BLSTM, encodes the input signal $x$ to a higher level feature representation $h$, while the speller decodes the output $y$ from this high level representation $h$}
+  \label{las_model}
+\end{figure}
+
+\paragraph{Listen}
+\paragraph{Attend and Spell}
+\paragraph{Learning}
+\paragraph{Decoding and Rescoring}
+
