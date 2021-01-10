@@ -2,11 +2,12 @@
 
 \section{Pre-requisites} 
 
-To start on the project, certain skills in programming and mathematics are required. In particular, the preliminary requirements of the project is as follows:\\
+To start on the project, certain skills in programming, mathematics and machine learning are required. In particular, the preliminary requirements of the project is as follows:\\
 
 \begin{itemize}
   \item Introduction to deep learning-based speech recognition
   \item Knowledge of machine learning, data preprocessing and model training
+  \item Knowledge of Recurrent Neural Networks (RNNs) and Long short-term memory units (LSTMs).
   \item Understanding of vector and matrix algebra
   \item Introductory course in Python
   \item Software development
@@ -21,6 +22,8 @@ To start on the project, certain skills in programming and mathematics are requi
 Data preprocessing is the process of transforming raw data into more useful representations which make them more suitable for ML models to better deduce patterns and increase their performance.
 
 Machine learning contains the model training process. This modelling process maximizes the model's performance while mitigating overfitting. During this process, the model will be trained with a set of hyperparameters and these are tuned accordingly over the training phase. Finally, the best performing model will be selected through performance metrics.\\
+
+\textbf{Recurrent Neural Networks and Long short-term memory units.} Recurrent Neural Networks (RNNs) are a particular architecture of Artificial Neural Networks (ANNs) which can process sequential data. In traditional ANN the input and output data are assumed to be independent. However, for sequential data, this is usually not the case. For example, the prediction of the next word in a sentence is dependent on the words that appeared before. As opposed to Multilayer Perceptrons (MLPs), RNNs feedback their outputs back to their network. Thus they gain an overview of past inputs which will be beneficial for processing sequential time-series. Although, deep RNNs are challenged by learning long-term dependencies. Effective sequence models such as gated RNNs are used to deal with this challenge. An example of a gated RNN is the Long short-term memory (LSTM) unit. This unit is composed of a memory cell, an input gate, an output gate and a forget gate. The cell stores information over a long period and the three gates control the flow of information through the cell. RNNs using LSTM units deal with the vanishing gradient problem because these units allow gradients to flow unchanged.\cite{doi:10.1162/neco.1997.9.8.1735}\\
 
 \textbf{Linear Algebra.} A sub-field of mathematics, which works with vectors and matrices. Since the input of deep learning is data that are transformed into structures of rows and columns, linear algebra is one of the key foundations of deep learning. It is used to describe the operations of the deep learning algorithms, and implement the algorithms in code. All tasks in deep learning relate to linear algebra, from data preprocessing to the deep learning algorithms.~\cite{Goodfellow-et-al-2016}
 
