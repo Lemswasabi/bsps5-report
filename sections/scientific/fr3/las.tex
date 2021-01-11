@@ -8,7 +8,7 @@ In this section, the \textit{Listen, Attend and Spell} (LAS) model will be inves
 	P(y|x) = \prod_{i} P(y_i|x,y_j)
 \end{equation}
 
-This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$. Whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Fig. \ref{las_model}.
+This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$\textcolor{red}{, w}hereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Fig. \ref{las_model}.
 
 \begin{align}
 	h &= Listen(x)\\
@@ -18,21 +18,21 @@ This model is composed of two modules: the listener and the speller. The listene
 \begin{figure}[h]
   \centering
   \includegraphics[scale=0.18]{las_architecture.jpg}
-	\caption{Representation of Listen, Attend and Spell (LAS) model.\cite{las_model} The listener, a pyramidel BLSTM, encodes the input signal $x$ to a higher level feature representation $h$, while the speller decodes the output $y$ from this high level representation $h$.}
+	\caption{Representation of Listen, Attend and Spell (LAS) model.\cite{las_model} The listener, a pyramid\textcolor{red}{a}l BLSTM, encodes the input signal $x$ to a higher level feature representation $h$, while the speller decodes the output $y$ from this high level representation $h$.}
   \label{las_model}
 \end{figure}
 
 \paragraph{Sequence to sequence learning} % corrected 84
 
-Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes. To process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Fig. \ref{encoder_decocer}.
+Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes\textcolor{red}{, t}o process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture \textcolor{red}{can} process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Fig. \ref{encoder_decocer}.
 
 \input{sections/scientific/fr3/encoder_decoder.tex}
 
-Sequence to sequence learning is a process based on the encoder-decoder architecture. This framework addresses the challenge of learning variable-length input and output sequences. This learning uses an encoder to transform variable input sequences into fixed-sized representations. Afterwards, a decoder is used to map this representation to a variable-length sequence. When training, the model provides the decoder with the labels. While during inference, the model executes a beam search to obtain a relevant output for later predictions.
+Sequence to sequence learning is a process based on the encoder-decoder architecture. \textcolor{blue}{This framework addresses the challenge of learning variable-length input and output sequences. This learning uses an encoder to transform variable input sequences into fixed-sized representations. Afterwards, a decoder is used to map this representation to a variable-length sequence}. \textcolor{red}{Remark: this part repeats.} \sout{When} \textcolor{red}{During} training, the model provides the decoder with the labels\textcolor{red}{, w}hile during inference, the model executes a beam search to obtain a relevant output for later predictions.
 
 These models are improved when combined with an attention mechanism. It supplies the decoder more information when producing the output. This mechanism propagates information more effectively from the encoder to the decoder at each time step.
 
-This learning framework has been applied to many domains, such as machine translations, image captioning, etc. This learning process is not limited to a particular domain and it could be applied to build ASR systems.
+This learning framework has been applied to many domains, such as machine translation\sout{s}, image captioning, etc. This learning process is not limited to a particular domain and it could be applied to build ASR systems.
 
 \paragraph{Listen}
 \paragraph{Attend and Spell}
