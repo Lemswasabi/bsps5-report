@@ -1,4 +1,4 @@
-\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.}
+\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.} % corrected 99
 
 \paragraph{Introduction}
 
@@ -8,7 +8,7 @@ In this section, the \textit{Listen, Attend and Spell} (LAS) model will be inves
 	P(y|x) = \prod_{i} P(y_i|x,y_j)
 \end{equation}
 
-This model is composes of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher level feature representation $h$. Whereas the speller module processes $h$ as input and computes a propability distribution over a sequence of characters. A representation of the LAS model with these two modules are given in Fig. \ref{las_model}.
+This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$. Whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Fig. \ref{las_model}.
 
 \begin{align}
 	h &= Listen(x)\\
@@ -22,11 +22,17 @@ This model is composes of two modules: the listener and the speller. The listene
   \label{las_model}
 \end{figure}
 
-\paragraph{Sequence to sequence learning}
+\paragraph{Sequence to sequence learning} % corrected 84
 
-Machine translation is an important challenge domain for sequence models. These models process input and output sequences of variable lengths. Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes. To process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of a single end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end. The encoder-decoder architecture copes with this drawback. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it encodes this fixed representation to a variable-length sequence. A illustration of this architecture is given in Fig. \ref{encoder_decocer}.
+Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes. To process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Fig. \ref{encoder_decocer}.
 
-\input{sections/scientific/fr3/encoder_decocer.tex}
+\input{sections/scientific/fr3/encoder_decoder.tex}
+
+Sequence to sequence learning is a process based on the encoder-decoder architecture. This framework addresses the challenge of learning variable-length input and output sequences. This learning uses an encoder to transform variable input sequences into fixed-sized representations. Afterwards, a decoder is used to map this representation to a variable-length sequence. When training, the model provides the decoder with the labels. While during inference, the model executes a beam search to obtain a relevant output for later predictions.
+
+These models are improved when combined with an attention mechanism. It supplies the decoder more information when producing the output. This mechanism propagates information more effectively from the encoder to the decoder at each time step.
+
+This learning framework has been applied to many domains, such as machine translations, image captioning, etc. This learning process is not limited to a particular domain and it could be applied to build ASR systems.
 
 \paragraph{Listen}
 \paragraph{Attend and Spell}
