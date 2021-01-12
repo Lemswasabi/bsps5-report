@@ -1,4 +1,4 @@
-\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.} % corrected 99
+\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.} % corrected 93
 
 \paragraph{Introduction}
 
@@ -8,7 +8,7 @@ In this section, the \textit{Listen, Attend and Spell} (LAS) model will be inves
 	P(y|x) = \prod_{i} P(y_i|x,y_j)
 \end{equation}
 
-This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$, whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Fig. \ref{las_model}.
+This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$, whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Figure \ref{las_model}.
 
 \begin{align}
 	h &= Listen(x)\\
@@ -24,7 +24,7 @@ This model is composed of two modules: the listener and the speller. The listene
 
 \paragraph{Sequence to sequence learning} % corrected 84
 
-Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes, to process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture can process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Fig. \ref{encoder_decocer}.
+Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes, to process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture can process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Figure \ref{encoder_decocer}.
 
 \input{sections/scientific/fr3/encoder_decoder.tex}
 
@@ -33,6 +33,8 @@ Sequence to sequence learning is a process based on the encoder-decoder architec
 These models are improved when combined with an attention mechanism. It supplies the decoder more information when producing the output. This mechanism propagates information more effectively from the encoder to the decoder at each time step.
 
 This learning framework has been applied to many domains, such as machine translation, image captioning, etc. This learning process is not limited to a particular domain and it could be applied to build ASR systems.
+
+\paragraph{Bidirectional LSTM RNN}
 
 \paragraph{Listen} % corrected 86
 
@@ -48,7 +50,7 @@ Compared to the BLSTM architecture, the pBLSTM model concatenates the outputs of
 	h_i^j = pBLSTM(h_{i-1}^j, \lbrack h_{2i}^{j-1}, h_{2i+1}^{j-1}\rbrack)
 \end{equation}
 
-The LAS model stacks 3 pBLSTMs above the BLSTM input layer. This decreases the time resolution $2^3 = 8$ times, allowing the attention model to derive important information from an input sequence with fewer time steps. An illustration of the $Listen$ operation is given in Fig. \ref{las_model}
+The LAS model stacks 3 pBLSTMs above the BLSTM input layer. This decreases the time resolution $2^3 = 8$ times, allowing the attention model to derive important information from an input sequence with fewer time steps. An illustration of the $Listen$ operation is given in Figure \ref{las_model}
 
 \paragraph{Attend and Spell} % corrected 99
 
@@ -62,7 +64,7 @@ The $AttendAndSpell$ operation uses an attention-based LSTM transducer to comput
 
 where $CharacterDistribution$ represents an MLP which character outputs are activated by a softmax function and $RNN$ is equal to a 2 layer LSTM network.\\
 
-At each timestep $i$ of the decoder, the $AttentionContext$ function generates for each timestep $u$ a scalar energy $e_{i,u}$ from $h_u \in h$ and $s_i$. The scalar energy $e_{i,u}$ is transformed into a probability distribution over timesteps applying a softmax function. This distribution is used to create the context vector $c_i$ when linearly blending it with the listener features $h_u$ at different timesteps:
+At each timestep $i$ of the decoder, the $AttentionContext$ function generates for each timestep $u$ a scalar energy $e_{i,u}$ from $h_u \in h$ and $s_i$. The scalar energy $e_{i,u}$ is transformed into a probability distribution $\alpha_{i,u}$ over timesteps applying a softmax function. This distribution is used to create the context vector $c_i$ when linearly blending it with the listener features $h_u$ at different timesteps:
 
 \begin{align}
 	e_{i,u} &= \langle \phi(s_i), \psi(h_u)\rangle\\
@@ -70,27 +72,34 @@ At each timestep $i$ of the decoder, the $AttentionContext$ function generates f
 	c_i &= \sum_u \alpha_{i,u}h_u
 \end{align}
 
-where $\phi$ and $\psi$ are MLP networks. $c_i$ can be interpreted as a collection of weighted features of h.
+where $\phi$ and $\psi$ are MLP networks. $c_i$ can be interpreted as a collection of weighted features of h. Figure \ref{las_model} illustrates the operation $AttendAndSpell$.
 
-\paragraph{Learning}
+\paragraph{Learning} % corrected 98
+
+The $Listen$ and $AttendAndSpell$ operations are trained jointly for end-to-end speech recognition. This sequence to sequence model conditions the next step prediction on the previously emitted characters and tries to maximize the log probability:
 
 \begin{equation}
 	\max_{\theta} \sum_i log P (y_i|x, y_{<i}^*;\theta)
 \end{equation}
 
-\begin{align}
-	\tilde{y_i} \sim CharacterDistribution(s_i,c_i) \\
+Although during inference, the expected results are not available. Thus the predictions of the model can deteriorate since it was not trained to be resistant against bad prediction inputs at any time steps. To deal with this during training, we sample from the previous character distribution and use it as input for the next step prediction instead of always feeding the ground truth label:
+
+\begin{equation}
+	\tilde{y_i} \sim CharacterDistribution(s_i,c_i)
+\end{equation}
+
+\begin{equation}
 	\max_\theta \sum_i log P(y_i|x,\tilde{y}_{<i};\theta)
-\end{align}
+\end{equation}
 
+where $\tilde{y_{i-i}}$ is the ground truth character or a character sampled from the model.
 
-\paragraph{Decoding and Rescoring}
+\paragraph{Decoding} % corrected 86
+
+During inference the LAS model finds the most probable character sequence given the acoustic input:
 
 \begin{equation}
 	\hat{y} = arg \max_{y} log P(y|x)
 \end{equation}
 
-
-\begin{equation}
-	s(y|x) = \frac{log P(y|x)}{|y|_c}+\lambda log P_{LM}(y)
-\end{equation}
+A left-to-right beam search algorithm is used to perform decoding. A set of $\beta$ incomplete hypothesis is initialized each starting with the start-of-sentence $\langle sos \rangle$ token. Each hypothesis in the beam is expanded at each time step with every possible character. Only the $\beta$ most probable beams are retained. When reaching the end-of-sentence $\langle sos \rangle$ token, the candidate is removed from the beam and placed to the completed hypothesis. A word dictionary can be added to the decoding phase. However, as observed from the experiments in section \ref{las_assessment}, this is not necessary because the LAS model learns to spell real words most of the time.
