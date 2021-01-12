@@ -2,50 +2,17 @@
 
 \section{Conclusion}
 
-% The main objective of this Bachelor Semester Project is to present the
-% architecture of an attention-based speech recognition model. An additional
-% objective is to reuse an existing implementation of the attention-based
-% model, adapt it to the scope of this project and compare its accuracy to the
-% results of other state-of-the-art speech recognition models. Furthermore, its
-% performance will be assessed with different sets of tuned hyperparameters.
-% Finally, the implemented speech recognition model should be trained on the
-% LibriSpeech dataset which contains a large-scale corpus of read English
-% speech
+The main objective of this Bachelor Semester Project is to present the architecture of an attention-based speech recognition model. An additional objective is to reuse an existing implementation of the attention-based model, adapt it to the scope of this project and compare its accuracy to the results of other state-of-the-art speech recognition models. Furthermore, its performance will be assessed with different sets of tuned hyperparameters. Finally, the implemented speech recognition model should be trained on the LibriSpeech dataset which contains a large-scale corpus of read English speech
 
-% The scientific aspect covered by this Bachelor Semester Project is the
-% architecture of attention-based models. The focus of the scientific
-% presentation will be on the architecture of this model and how it compares to
-% other state-of-the-art models. Further, the model's performance will be
-% assessed when using different hyperparameters.
+The scientific aspect covered by this Bachelor Semester Project is the architecture of attention-based models. The focus of the scientific presentation will be on the architecture of this model and how it compares to other state-of-the-art models. Further, the model's performance will be assessed when using different hyperparameters.
 
-% The technological aspect of this project is the reuse and adaptation of an
-% existing implementation of the attention-based speech recognition model.
-% Additionally, the LibriSpeech dataset will be preprocessed and used for the
-% model’s training. The goal is to deploy its training on an HPC environment
-% for efficient computing.
+The technological aspect of this project is the reuse and adaptation of an existing implementation of the attention-based speech recognition model.  Additionally, the LibriSpeech dataset will be preprocessed and used for the model’s training. The goal is to deploy its training on an HPC environment
+for efficient computing.
 
+In this paper, end-to-end isolated word recognition using deep neural networks is presented. Four different ANN models were investigated. The focus of this paper is using RNN architectures for end-to-end speech recognition and investigating whether gated RNNs outperform vanilla RNN units and how they deal with long-term dependencies. The results showed, that gated RNNs substantially outperform basic feedforward and recurrent neural networks. The performance analysis can be consulted in Section~\ref{assessment}\\
 
-% In this paper, end-to-end isolated word recognition using deep neural networks
-% is presented. Four different ANN models were investigated. The focus of this
-% paper is using RNN architectures for end-to-end speech recognition and
-% investigating whether gated RNNs outperform vanilla RNN units and how they deal
-% with long-term dependencies. The results showed, that gated RNNs substantially
-% outperform basic feedforward and recurrent neural networks. The performance
-% analysis can be consulted in Section~\ref{assessment}\\
+A further objective of this paper is to recognize Luxembourgish words. To the best of our knowledge, there is a lack of continuous speech dataset in Luxembourgish. Thus efforts were put to collect a small dataset containing Luxembourgish spoken words $w \in \{'Null',\dots,'Neng'\}$. This dataset was recorded by one person which makes it speaker-dependent speech recognition. In Section~\ref{datasetlux} the methods used to collect the dataset were elaborated. Four previously discussed ANN architectures were applied to our collected Luxembourgish dataset and yielded excellent performance with accuracy close to 1.\\
 
-% A further objective of this paper is to recognize Luxembourgish words. To the
-% best of our knowledge, there is a lack of continuous speech dataset in
-% Luxembourgish. Thus efforts were put to collect a small dataset containing
-% Luxembourgish spoken words $w \in \{'Null',\dots,'Neng'\}$. This dataset was
-% recorded by one person which makes it speaker-dependent speech recognition. In
-% Section~\ref{datasetlux} the methods used to collect the dataset were
-% elaborated. Four previously discussed ANN architectures were applied to our
-% collected Luxembourgish dataset and yielded excellent performance with accuracy
-% close to 1.\\
+Continuation of this project would be to extend the Luxembourgish dataset with continuous speech or to add instances spoken by multiple speakers.\\
 
-% Continuation of this project would be to extend the Luxembourgish dataset with
-% continuous speech or to add instances spoken by multiple speakers.\\
-
-% In my opinion, I find it interesting to work with deep neural networks and their
-% practical use. This project will give me the required background to start on my
-% next BSP which deals with attention-based models for speech recognition.
+In my opinion, I find it interesting to work with deep neural networks and their practical use. This project will give me the required background to start on my next BSP which deals with attention-based models for speech recognition.
