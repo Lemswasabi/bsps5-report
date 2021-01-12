@@ -23,7 +23,7 @@ To extract the Mel-Filterbanks from the dataset, the following extraction steps 
       P_{i}(k)=\frac{1}{N}{\mid{S_{i}(k)}\mid}^{2}
     \end{equation}
   This is called the Periodogram estimate of the power spectrum which identifies for every frame which frequencies are present.\\
-\item Apply the Mel-filterbank to the power spectrum and sum the energy in each filter. The Mel-filterbank is a set of 40 triangular filters. Each filter within the filterbank is triangle shaped with a value of 1 at its frequency center and decreases to 0 reaching the center of the neighboring filter. This Filterbank on a Mel-Scale is shown in Figure \ref{mel-filterbank}.
+\item Apply the Mel-filterbank to the power spectrum and sum the energy in each filter. The Mel-filterbank is a set of 40 triangular filters. Each filter within the filterbank is triangle shaped with a value of 1 at its frequency center and decreases to 0 reaching the center of the neighboring filter. This Filterbank on a Mel-Scale is shown in Fig. \ref{mel-filterbank}.
 
   \begin{figure}[H]
     \centering
@@ -32,7 +32,7 @@ To extract the Mel-Filterbanks from the dataset, the following extraction steps 
     \label{mel-filterbank}
   \end{figure}
 
-  The filterbank energies are calculated by multiplying every filterbank with the power spectrum of the signal. The resulting spectrogram can be seen in Figure \ref{spectrogram}.\\
+  The filterbank energies are calculated by multiplying every filterbank with the power spectrum of the signal. The resulting spectrogram can be seen in Fig. \ref{spectrogram}.\\
   
   \begin{figure}[H]
     \centering
@@ -41,7 +41,7 @@ To extract the Mel-Filterbanks from the dataset, the following extraction steps 
     \label{spectrogram}
   \end{figure}
 
-  To obtain the Mel-filterbank features, the mean of each coefficient is substracted from all frames. The mean-normalized Mel-Filterbanks is show in Figure \ref{normalized-filterbanks}.
+  To obtain the Mel-filterbank features, the mean of each coefficient is substracted from all frames. The mean-normalized Mel-Filterbanks is show in Fig. \ref{normalized-filterbanks}.
 
   \begin{figure}[H]
     \centering

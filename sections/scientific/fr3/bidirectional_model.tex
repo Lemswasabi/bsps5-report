@@ -1,0 +1,60 @@
+\begin{figure}[H]
+  \centering
+  \begin{tikzpicture}
+
+		\node (i1) at (-3,-1.5) [draw] {$X_1$};
+		\node (i2) at (-1,-1.5) [draw] {$X_2$};
+		\node (i3) at (1,-1.5) [draw] {$X_3$};
+		\node (iT) at (4,-1.5) [draw] {$X_t$};
+
+		\node (hf1) at (-3,-0.5) [draw] {$\overrightarrow{H}_1$};
+		\node (hf2) at (-1,-0.5) [draw] {$\overrightarrow{H}_2$};
+		\node (hf3) at (1,-0.5) [draw] {$\overrightarrow{H}_3$};
+		\node (hf4) at (2.5,-0.5) {...};
+		\node (hfT) at (4,-0.5) [draw] {$\overrightarrow{H}_t$};
+
+		\node (hb1) at (-3,0.5) [draw] {$\overleftarrow{H}_1$};
+		\node (hb2) at (-1,0.5) [draw] {$\overleftarrow{H}_2$};
+		\node (hb3) at (1,0.5) [draw] {$\overleftarrow{H}_3$};
+		\node (hb4) at (2.5,0.5) {...};
+		\node (hbT) at (4,0.5) [draw] {$\overleftarrow{H}_t$};
+
+		\node (o1) at (-3,1.5) [draw] {$o_1$};
+		\node (o2) at (-1,1.5) [draw] {$o_2$};
+		\node (o3) at (1,1.5) [draw] {$o_3$};
+		\node (oT) at (4,1.5) [draw] {$o_t$};
+    
+		\draw[stateTransition] (i1) -- (hf1);
+		\draw[stateTransition] (i2) -- (hf2);
+		\draw[stateTransition] (i3) -- (hf3);
+		\draw[stateTransition] (iT) -- (hfT);
+
+		\draw[stateTransition] (i1) to[out=135,in=225] (hb1);
+		\draw[stateTransition] (i2) to[out=135,in=225] (hb2);
+		\draw[stateTransition] (i3) to[out=135,in=225] (hb3);
+		\draw[stateTransition] (iT) to[out=135,in=225] (hbT);
+
+		\draw[stateTransition] (hb1) -- (o1);
+		\draw[stateTransition] (hb2) -- (o2);
+		\draw[stateTransition] (hb3) -- (o3);
+		\draw[stateTransition] (hbT) -- (oT);
+
+		\draw[stateTransition] (hf1) to[out=45,in=-45] (o1);
+		\draw[stateTransition] (hf2) to[out=45,in=-45] (o2);
+		\draw[stateTransition] (hf3) to[out=45,in=-45] (o3);
+		\draw[stateTransition] (hfT) to[out=45,in=-45] (oT);
+
+		\draw[stateTransition] (hf1) -- (hf2);
+		\draw[stateTransition] (hf2) -- (hf3);
+		\draw[stateTransition] (hf3) -- (hf4);
+		\draw[stateTransition] (hf4) -- (hfT);
+
+		\draw[stateTransition] (hbT) -- (hb4);
+		\draw[stateTransition] (hb4) -- (hb3);
+		\draw[stateTransition] (hb3) -- (hb2);
+		\draw[stateTransition] (hb2) -- (hb1);
+
+  \end{tikzpicture}
+	\caption{Architecture of a bidirectional RNN with a single hidden layer.}
+  \label{bidirectional_rnn}
+\end{figure}

@@ -1,4 +1,4 @@
-\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.} % corrected 93
+\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.} % corrected LN 96
 
 \paragraph{Introduction}
 
@@ -8,7 +8,7 @@ In this section, the \textit{Listen, Attend and Spell} (LAS) model will be inves
 	P(y|x) = \prod_{i} P(y_i|x,y_j)
 \end{equation}
 
-This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$, whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Figure \ref{las_model}.
+This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$, whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Fig. \ref{las_model}.
 
 \begin{align}
 	h &= Listen(x)\\
@@ -24,7 +24,7 @@ This model is composed of two modules: the listener and the speller. The listene
 
 \paragraph{Sequence to sequence learning} % corrected 84
 
-Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes, to process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMS). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture can process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Figure \ref{encoder_decocer}.
+Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes, to process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMs). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture can process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Fig. \ref{encoder_decocer}.
 
 \input{sections/scientific/fr3/encoder_decoder.tex}
 
@@ -34,7 +34,28 @@ These models are improved when combined with an attention mechanism. It supplies
 
 This learning framework has been applied to many domains, such as machine translation, image captioning, etc. This learning process is not limited to a particular domain and it could be applied to build ASR systems.
 
-\paragraph{Bidirectional LSTM RNN}
+\paragraph{Bidirectional RNN} % corrected 99
+
+Bidirectional RNNs stack an additional hidden layer on top of an existing RNN which runs forward from the first token. This stacked hidden layer passes information backwards from the last token to the front. This mechanism in RNNs reproduces a look-ahead ability similar to the one found in HMMs.\cite{zhang2020dive} An illustration of a bidirectional RNN's architecture with a single hidden layer is given in Fig. \ref{bidirectional_rnn}.
+
+\input{sections/scientific/fr3/bidirectional_model.tex}
+
+For each time step $t$, let a minibatch input $\bm{X_t} \in \mathbb{R}^{n \times d}$, where $n$ is the number of examples and $d$ is the number of input for each example. We define $\phi$ as activation funciton of the hidden layer. In the bidirectional design, it is assumed that at time step $t$ the forward and backward hidden states are $\overrightarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$ and $\overleftarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$, respectively, where $h$ represents the number of hidden units. The update equations for the forward and backward hidden states are defined as follows:
+
+\begin{align}
+	\overrightarrow{\bm{H}}_t &= \phi(X_tW_{xh}^{(f)}+\overrightarrow{H}_{t-1}W_{hh}^{(f)}+b_h^{(f)})\\
+	\overleftarrow{\bm{H}}_t &= \phi(X_tW_{xh}^{(b)}+\overleftarrow{H}_{t+1}W_{hh}^{(b)}+b_h^{(b)})
+\end{align}
+
+where the weights $W_{xh}^{(f)} \in \mathbb{R}^{d \times h}$, $W_{hh}^{(f)} \in \mathbb{R}^{h \times h}$, $W_{xh}^{(b)} \in \mathbb{R}^{d \times h}$ and $W_{hh}^{(b)} \in \mathbb{R}^{h \times h}$, and biases $b_h^{(f)} \in \mathbb{R}^{1 \times h}$ and $b_h^{(b)} \in \mathbb{R}^{1 \times h}$ represent the model's parameters.\\
+
+To compute the hidden state $\bm{H}_t \in \mathbb{R}^{n \times 2h}$ which will be the input of the output layer, the forward and backward hidden states $\overrightarrow{\bm{H}}_t$ and $\overleftarrow{\bm{H}}_t$ are concatenated. This hidden state $\bm{H}_t$ is passed as input to the next bidirectional layer in a deep bidirectional RNN with different hidden layers. The last layer of a bidirectional RNN computes the output $\bm{O}_t$:
+
+\begin{equation}
+	\bm{O}_t = \bm{H}_tW_{hq}+b_q
+\end{equation}
+
+where $W_{hq} \in \mathbb{R}^{2h \times q}$ is the weight matrix, $b_q \in \mathbb{R}^{1 \times q}$ is the bias vector and $q$ is the number of outputs.
 
 \paragraph{Listen} % corrected 86
 
@@ -50,7 +71,7 @@ Compared to the BLSTM architecture, the pBLSTM model concatenates the outputs of
 	h_i^j = pBLSTM(h_{i-1}^j, \lbrack h_{2i}^{j-1}, h_{2i+1}^{j-1}\rbrack)
 \end{equation}
 
-The LAS model stacks 3 pBLSTMs above the BLSTM input layer. This decreases the time resolution $2^3 = 8$ times, allowing the attention model to derive important information from an input sequence with fewer time steps. An illustration of the $Listen$ operation is given in Figure \ref{las_model}
+The LAS model stacks 3 pBLSTMs above the BLSTM input layer. This decreases the time resolution $2^3 = 8$ times, allowing the attention model to derive important information from an input sequence with fewer time steps. An illustration of the $Listen$ operation is given in Fig. \ref{las_model}
 
 \paragraph{Attend and Spell} % corrected 99
 
@@ -72,7 +93,7 @@ At each timestep $i$ of the decoder, the $AttentionContext$ function generates f
 	c_i &= \sum_u \alpha_{i,u}h_u
 \end{align}
 
-where $\phi$ and $\psi$ are MLP networks. $c_i$ can be interpreted as a collection of weighted features of h. Figure \ref{las_model} illustrates the operation $AttendAndSpell$.
+where $\phi$ and $\psi$ are MLP networks. $c_i$ can be interpreted as a collection of weighted features of h. Fig. \ref{las_model} illustrates the operation $AttendAndSpell$.
 
 \paragraph{Learning} % corrected 98
 
