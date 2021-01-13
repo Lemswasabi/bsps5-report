@@ -39,7 +39,7 @@ In this experiment, we train the model on 100h of the LibriSpeech corpus to lear
 \begin{figure}[H]
   \centering
 	\includegraphics[scale=0.2]{figures/100_chars.png}
-  \caption{Training on 100h of the LibriSpeech corpus. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \caption{Training on 100h of the LibriSpeech corpus. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
   \label{100_chars}
 \end{figure}
 
@@ -63,7 +63,7 @@ The same configured model was trained on 100h of training data but uses a word d
 \begin{figure}[ht]
   \centering
 	\includegraphics[scale=0.2]{figures/100_words.png}
-  \caption{Training on 100h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \caption{Training on 100h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
   \label{100_words}
 \end{figure}
 
@@ -85,7 +85,7 @@ This time, the model was trained on 460h of the LibriSpeech corpus. The training
 \begin{figure}[ht]
   \centering
 	\includegraphics[scale=0.2]{figures/460_chars.png}
-  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
   \label{460_chars}
 \end{figure}
 
@@ -107,7 +107,7 @@ In this experiment, the model was trained on 460h of training data as well but c
 \begin{figure}[ht]
   \centering
 	\includegraphics[scale=0.2]{figures/460_words.png}
-  \caption{Training on 460h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \caption{Training on 460h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
   \label{460_words}
 \end{figure}
 
@@ -133,7 +133,7 @@ The model has almost the same structure as in the previous experiment. However, 
 \begin{figure}[ht]
   \centering
 	\includegraphics[scale=0.2]{figures/460_specaugment.png}
-  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
   \label{460_specaugment}
 \end{figure}
 
@@ -166,8 +166,7 @@ In this section, we will fine-tune the beam width $\beta$ during decoding of our
 
 
 \subsubsection{Attention Visualization}
-
-The model was able to identify the start and the end of the utterance, although it outputs the phrase \textit{"a man was looking in from the quarter behind at the four persons we were just discussing"} instead of \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}. There is only one word which is spelt wrongly. The attention alignment of the audio signal of this utterance is visualized in Fig. \ref{attention_alignment}.
+The attention alignment of the audio signal of a validation utterance is visualized in Fig. \ref{attention_alignment}. The model was able to identify the start and the end of the utterance, although it outputs the phrase \textit{"a man was looking in from the quarter behind at the four persons we were just discussing"} instead of \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}. There is only one word which is spelt wrongly.
 
 \begin{figure}[H]
   \centering
