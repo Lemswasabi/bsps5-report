@@ -1,167 +1,177 @@
-\subsubsection{NFR01: Performance evaluation and comparison}~\label{las_assessment}
+\subsubsection{NFR01: Performance evaluation and comparison}~\label{las_assessment} % corrected LN 89
 
-% In this section, the performance of the four ANNs investigated in Section~\ref{ann} are evaluated. We use the English and Luxembourgish dataset for the performance analysis.\\
+In this section, the performance of the LAS architecture will be evaluated. For this analysis study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formatted file. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Additionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}
 
-For this study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formated file. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Addionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}
+First of all, we define a couple of configurations which will set up the hyperparameters of the LAS model to perform different experiments:
 
-% The English and Luxembourgish dataset contains spoken words $w \in
-% \{'0',\dots,'9'\}$. The English dataset consists of 17749 data instances whereas
-% the Luxembourgish consists of 500 data instances.\\
+\begin{itemize}
+	\item Non-pyramidal encoder
+	\item SpecAgument LAS architecture
+\end{itemize}
 
-% The first step is to choose an optimal optimizer. The choice is between using
-% the stochastic gradient descent (SGD) or Adam optimizer. The latter is a
-% combination of two extensions of SGD, Adaptive Gradient Algorithm (AdaGrad) and
-% Root Mean Square Propagation (RMSProp)~\cite{Adam}. The four models will be
-% trained on the English dataset to designate the right optimizer and number of
-% epochs. Their training will be visualized with $60\ epochs$ each. The training
-% visualization is given in the appendix as follows:\\
+\subsubsection{LAS model with non-pyramidal encoder}
 
-% \begin{enumerate}[label=\arabic*.]
-%   \item Feedforward Neural Network:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{ffa}.
-%       \item Validation loss in Figure~\ref{ffl}.
-%     \end{itemize}
-%   \item RNN:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{rnna}.
-%       \item Validation loss in Figure~\ref{rnnl}.
-%     \end{itemize}
-%   \item LSTM:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{lstma}.
-%       \item Validation loss in Figure~\ref{lstml}.
-%     \end{itemize}
-%   \item GRU:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{grua}.
-%       \item Validation loss in Figure~\ref{grul}.
-%     \end{itemize}
-% \end{enumerate}~\\
+In this experiment, we will train multiple LAS models without the encoder having a pyramidal form. The hyperparameters for this model look as follows:
 
-% Let $n=60$ be the number of epochs. The two optimizers return the following
-% testing accuracies (acc) and losses:
+\lstinputlisting{sections/scientific/nfr1/non_pyramidal_encoder_config.yaml}
 
-% \begin{table}[H]
-%     \centering
-%     \resizebox{\columnwidth}{!}{%
-%     \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-%         \hline
-%         \multirow{2}{*}{Optimizer} & \multicolumn{2}{c|}{FF} &
-%         \multicolumn{2}{c|}{RNN} & \multicolumn{2}{c|}{LSTM} &
-%         \multicolumn{2}{c|}{GRU} \\
-%         \cline{2-9}
-%         & {acc} & {loss} & {acc} & {loss} & {acc} & {loss} & {acc} & {loss}\\
-%         \hline
-%         SGD & 0.79 & 0.65 & 0.43 & 1.51 & 0.86 & 0.46 & 0.85 & 0.46 \\ \hline
-%         Adam & 0.87 & 0.47 & 0.72 & 0.97 & 0.94 & 0.24 & 0.94 & 0.24 \\ \hline
-%     \end{tabular}%
-%     \caption{Comparison of the four models' testing results using SGD and Adam.
-%     The models were trained on the English dataset.}
-%     \label{table:comparison}
-%     }
-% \end{table}
+The model's encoder is configured with 5 BLSTM layers each composed of 512 units. No dropout is applied to the output of the encoder. The attention mechanism is based on location awareness and contains 300 units.\cite{chorowski2015attentionbased} Further, the decoder includes 1 LSTM layer of 512 units. The model uses the \textit{Adadelta} optimizer which is a stochastic gradient descent method. It is set to train from $1000001 \ steps$ and validates the model at each $5000 \ steps$ intervals. Although, the training of the model stops earlier before $1000001 \ steps$ since the runtime on the HPC is restricted to 2 days.\\
 
-% Table~\ref{table:comparison} shows that the validation accuracies using the Adam
-% optimizer yield better accuracies compared to SGD. Therefore, for the following
-% investigation, the Adam optimizer is considered.\\
+For this configuration, we investigate 4 different experiments:
 
-% The next step is to choose the number of epochs which will be used for the
-% performance analysis. The training visualizations show the loss converges around
-% $40$ epochs except for the RNN model. Figure \ref{300rnna} shows that the RNN
-% model converges around $220$ epochs with an accuracy of 0.88. The training
-% visualization of the RNN model with $300$ epochs is given in
-% Figures~\ref{300rnna} and~\ref{300rnnl} in the appendix.\\
+\begin{itemize}
+	\item Training on 100h of the LibriSpeech corpus
+		\begin{itemize}
+			\item Predicting characters
+			\item Predicting characters constrained with a word dictionary
+		\end{itemize}
+	\item Training on 460h of the LibriSpeech corpus
+		\begin{itemize}
+			\item Predicting characters
+			\item Predicting characters constrained with a word dictionary
+		\end{itemize}
+\end{itemize}
 
-% Choosing $epochs = 40$ to evaluate each model's performance, we have:
+\paragraph{100h: Predicting characters}
 
-% \begin{table}[H]
-%     \centering
-%     \resizebox{\columnwidth}{!}{%
-%     \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-%         \hline
-%         \multirow{2}{*}{Optimizer} & \multicolumn{2}{c|}{FF} &
-%         \multicolumn{2}{c|}{RNN} & \multicolumn{2}{c|}{LSTM} &
-%         \multicolumn{2}{c|}{GRU} \\
-%         \cline{2-9}
-%                                  & {acc} & {loss} & {acc} & {loss} & {acc} &
-%         {loss} & {acc} & {loss}\\ \hline
-%         Adam & 0.83 & 0.54 & 0.63 & 1.10 & 0.937 & 0.23 & 0.94 &
-%         0.23 \\ \hline
-%     \end{tabular}%
-%     \caption{The testing results of the four models using Adam. The four models
-%     were trained on the English dataset. $FF$ is the abbreviation for feedforward
-%     and $acc$ stands for accuracy.}
-%     \label{table:40}
-%     }
-% \end{table}
+In this experiment, we train the model on 100h of the LibriSpeech corpus to learn predicting characters from the acoustic features without a word dictionary. The training visualization is illustrated in Fig. \ref{100_chars}. The model was able to reduce the loss during training and the loss converges to zero. The Word Error Rate (WER) metric is used as a performance measure. The WER is derived from the Levenshtein distance which computes the difference between two string sequences. During training, the model achieves a WER close to 0\%. Whereas, during validation the LAS model reaches a 24\% WER.
 
-% Inspecting the results shows that LSTM and GRU perform better than feedforward
-% and RNN. The overall performance is slightly underneath the performance at 60
-% epochs. In this case, RNN has the lowest accuracy. This is expected, since
-% standard RNNs can't deal with learning long-term temporal dependencies, because
-% the gradient of the loss function decays exponentially with time (vanishing
-% gradient problem). LSTMs and GRUs use gated units to maintain the information in
-% memory for longer periods of time, and to control which information is kept, and
-% which is forgotten. This explains substantially better performance obtained
-% using LSTM and GRU. Compared to feedforward neural networks, LSTM and GRU have
-% better accuracy since they take advantage of their recurrent units to process
-% series data.\\
+\begin{figure}[H]
+  \centering
+	\includegraphics[scale=0.2]{figures/100_chars.png}
+  \caption{Training on 100h of the LibriSpeech corpus. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{100_chars}
+\end{figure}
 
-% \textbf{Training on Luxembourgish dataset.} The same models used to train on the
-% English dataset were used to train on the Luxembourgish dataset. The following
-% testing accuracies and losses were obtained while training on the Luxembourgish
-% dataset:
+When evaluating the model on the testing dataset from the LibriSpeech, which contains 2,620 examples, it achieves a WER of 24\% as well as seen in Table \ref{table:test_100_chars}.
 
-% \begin{table}[H]
-%     \centering
-%     \resizebox{\columnwidth}{!}{%
-%     \begin{tabular}{|c|c|c|c|c|c|c|c|c|}
-%         \hline
-%         \multirow{2}{*}{Optimizer} & \multicolumn{2}{c|}{FF} &
-%         \multicolumn{2}{c|}{RNN} & \multicolumn{2}{c|}{LSTM} &
-%         \multicolumn{2}{c|}{GRU} \\
-%         \cline{2-9}
-%         & {acc} & {loss} & {acc} & {loss} & {acc} & {loss} & {acc} & {loss}\\
-%         \hline
-%         Adam & 0.84 & 0.59 & 0.73 & 0.83 & 1.0 & 0.02 & 0.99 & 0.02 \\ \hline
-%     \end{tabular}%
-%     \caption{The testing results of the four models using Adam. The four models
-%     were trained on the Luxembourgish dataset. The dataset contains 50 instances
-%     of each spoken word. FF is the abbreviation for feedforward and $acc$ stands for
-%     accuracy.}
-%     \label{table:lux}
-%     }
-% \end{table}
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {10.2} & {9.3}\\ \hline
+				{Word} & {24} & {18.8}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_100_chars}
+\end{table}
 
-% The results show that LSTM and GRU generalize better than feedforward and RNN.
-% The validation accuracies of LSTM and GRU are both roughly 99\%. The high
-% accuracy of LSTM and GRU can be explained by the small dataset which is also
-% speaker-dependent.  The results of LSTM and GRU are expected to drop if the
-% dataset grows and contains a variety of speakers.\\
+\paragraph{100h: Predicting characters with a word dictionary}
 
-% The training visualization on the Luxembourgish dataset is given in the appendix
-% as follows:\\
+The same configured model was trained on 100h of training data but uses a word dictionary to constrain the search space to valid words when decoding. The training visualization is illustrated in Fig. \ref{100_words}. The model achieves a validation WER of 25\%. When evaluating the model on the same testing dataset, it achieves a testing WER of 25.1\% as seen in Table \ref{table:test_100_words}. The result shows that a word dictionary is not necessary when decoding the output of the model.
 
-% \begin{enumerate}[label=\arabic*.]
-%   \item Feedforward Neural Network:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{luxffa}.
-%       \item Validation loss in Figure~\ref{luxffl}.
-%     \end{itemize}
-%   \item RNN:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{luxrnna}.
-%       \item Validation loss in Figure~\ref{luxrnnl}.
-%     \end{itemize}
-%   \item LSTM:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{luxlstma}.
-%       \item Validation loss in Figure~\ref{luxlstml}.
-%     \end{itemize}
-%   \item GRU:
-%     \begin{itemize}
-%       \item Validation accuracy in Figure~\ref{luxgrua}.
-%       \item Validation loss in Figure~\ref{luxgrul}.
-%     \end{itemize}
-% \end{enumerate}
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/100_words.png}
+  \caption{Training on 100h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{100_words}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {13.9} & {18.9}\\ \hline
+				{Word} & {25.1} & {23.6}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_100_words}
+\end{table}
+
+\paragraph{460h: Predicting characters}\label{best_candidate}
+
+This time, the model was trained on 460h of the LibriSpeech corpus. The training visualization is illustrated in Fig. \ref{460_chars}. The model achieves a validation WER of 13\%. When evaluating the model on the testing dataset, it achieves a testing WER of 14.1\% as seen in Table \ref{table:test_460_chars}.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/460_chars.png}
+  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{460_chars}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {5.8} & {7.3}\\ \hline
+				{Word} & {14.1} & {15.3}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_460_chars}
+\end{table}
+
+\paragraph{460h: Predicting characters with a word dictionary}
+
+In this experiment, the model was trained on 460h of training data as well but constrains the decoding of the output with a word dictionary. The training visualization is illustrated in Fig. \ref{460_words}. The model achieves a validation WER of 13\%. When evaluating the model on the testing dataset, it achieves a testing WER of 14.9\% as seen in Table \ref{table:test_460_words}. The result shows as well that a word dictionary is not necessary when decoding the output of the model.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/460_words.png}
+  \caption{Training on 460h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{460_words}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {7.7} & {34.3}\\ \hline
+				{Word} & {14.9} & {40.6}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_460_words}
+\end{table}
+
+\subsubsection{SpecAugment LAS architecture}
+
+In this experiment, we will train a LAS model with the SpecAugment architecture.\cite{Park_2019} The hyperparameters for this model look as follows:
+
+\lstinputlisting{sections/scientific/nfr1/spec_augment.yaml}
+
+The model has almost the same structure as in the previous experiment. However, the encoder is configured with 4 BLSTM layers instead of 5, each composed of 1024 units. In this experiment, the model was trained on 460h of training data without using a dictionary for decoding. The training visualization is illustrated in Fig. \ref{460_specaugment}. The model achieves a validation WER of 15\%. When evaluating the model on the testing dataset, it achieves a testing WER of 15.5\% as seen in Table \ref{table:test_460_specaugment}. The result shows that this architecture did not improve the performance of the model over the previous architecture.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/460_specaugment.png}
+  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{460_specaugment}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {6.8} & {8.3}\\ \hline
+				{Word} & {15.5} & {16.7}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_460_specaugment}
+\end{table}
+
+\subsubsection{Beam Width}
+
+In this section, we will fine-tune the beam width $\beta$ during decoding of our best candidate found in section \ref{best_candidate}.
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Beam width $\beta$} & {WER (\%)}\\ \hline
+				{2} & {14.1}\\ \hline
+				{8} & {13.79}\\ \hline
+				{16} & {13.80}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model trained on 460h training data with different beam width $\beta$ on the testing dataset \textit{test\_clean}.}
+		\label{table:beam_width}
+\end{table}
+
+
+\subsubsection{Attention Visualization}
+
+The model was able to identify the start and the end of the utterance, although it outputs the phrase \textit{"a man was looking in from the quarter behind at the four persons we were just discussing"} instead of \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}. There is only one word which is spelt wrongly. The attention alignment of the audio signal of this utterance is visualized in Fig. \ref{attention_alignment}.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.17]{attention_alignment.png}
+  \caption{Audio signal and the attention alignment produced for the utterance \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}.}
+  \label{attention_alignment}
+\end{figure}
