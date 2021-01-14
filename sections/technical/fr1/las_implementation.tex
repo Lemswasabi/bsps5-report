@@ -1,3 +1,31 @@
-% corrected
+% corrected LN 99
 
 \subsubsection{FR01: Presentation of an existing LAS implementation.}
+
+In this section, the LAS implementation \textit{End-to-end Automatic Speech Recognition Systems - PyTorch Implementation} \cite{alex2019sequencetosequence} will be presented. The main entry of this implementation is the \textit{main.py} program:
+
+\lstinputlisting{sections/technical/fr1/las_main.py}
+
+For this presentation, the \textit{train} mode of the application will be focused on. The \textit{main.py} imports the class \textit{Solver} from \textit{bin.train\_asr} while being in the training mode. On line 20, an instance of the Solver class is created with the hyperparameters and training mode as arguments. This object loads the training and validation set on line 21 with the \textit{load\_data()} method. The object initialises a model with the defined hyperparameters on line 22 with the \textit{set\_model()} method and executes its training on line 23 with the method \textit{exec()}.\\
+
+In the following listing, the method \textit{load\_data()} will be shown:
+
+\lstinputlisting{sections/technical/fr1/las_load_data.py}
+
+The function \textit{load\_dataset()} on line 3, uses PyTorch's DataLoader interface which is an utility to customize loading of datasets. This function parses the LibriSpeech dataset and extracts the Mel-filterbanks. It outputs then the training set and the validation set each divided into batches.\\
+
+The following listing show cases the \textit{set\_model()} method:
+
+\lstinputlisting{sections/technical/fr1/las_set_model.py}
+
+This function initialises the \textit{Adadelta} optimizer and creates an \textit{ASR()} instance for the \textit{self.model} attribute. On line 9, it asigns the the \textit{CrossEntropyLoss} as the loss function. The \textit{ASR()} class is defined as follows:
+
+\lstinputlisting{sections/technical/fr1/las_asr_class.py}
+
+When initializing the \textit{ASR()} class, it creates an encoder layer, an Embedding layer for the vocabulary, a dropout layer, a decoder layer and an attention layer.\\
+
+The \textit{exec()} method is defined as follows:
+
+\lstinputlisting{sections/technical/fr1/las_exec.py}
+
+This function trains the model initialized in previous steps. On line 5 and 6, the function iterates over the number of training steps and data batches. The model passes the input data forward through the network with the method \textit{self.model()}. The model propagates the losses back with the method \textit{self.backward(total\_loss)} and increments the number of steps by one. The function calls the methods \textit{self.log()} and \textit{self.validate()} to log the current training state and validate the model's performance respectively.
