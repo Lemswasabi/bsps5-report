@@ -67,10 +67,10 @@ def flac2wav(f_path):
     flac_audio = AudioSegment.from_file(f_path, "flac")
     flac_audio.export(f_path[:-4] + 'wav', format="wav")
 
-def wav2logfbank(f_path):
+def wav2fbank(f_path):
     (rate, sig) = wav.read(f_path)
-    fbank_feat = logfbank(sig, rate, winlen=win_size, nfilt=n_filters)
-    filename = f_path[:-4] + '-logfbank' + str(n_filters)
+    fbank_feat = fbank(sig, rate, winlen=win_size, nfilt=n_filters)
+    filename = f_path[:-4] + '-fbank' + str(n_filters)
     np.save(filename, fbank_feat)
     return filename + '.npy'
 
@@ -101,11 +101,11 @@ def process_flac2wav():
     test_file_list = parse_audio(root, test_path)
     _ = Parallel(n_jobs=n_jobs,backend="threading")(delayed(flac2wav)(f) for f in tqdm(test_file_list))
 
-def process_wav2speech_feature(speech_feature):
+def process_wav2speech_feature(speech_feature='fbank'):
     global train_file_list, dev_file_list, test_file_list
 
     speech_features = {
-        'logfbank': wav2logfbank,
+        'fbank': wav2fbank,
         'mfcc': wav2mfcc,
     }
 
@@ -207,7 +207,7 @@ if __name__ == '__main__':
 
     print('---------------------------------------')
 
-    process_wav2speech_feature('logfbank')
+    process_wav2speech_feature()
 
     print('---------------------------------------')
 
