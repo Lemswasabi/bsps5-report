@@ -1,10 +1,10 @@
 #!/bin/bash -l
 #SBATCH -J las460fc
 #SBATCH --mail-type=begin,end,fail
-#SBATCH --mail-user=le.nguyen.001@student.uni.lu
+#SBATCH --mail-user=user_id@student.uni.lu
 #SBATCH -N 1
 #SBATCH -n 8
-#SBATCH -G=1
+#SBATCH -G 1
 #SBATCH --time=2-00:00:00
 #SBATCH -p gpu
 #SBATCH --qos=normal

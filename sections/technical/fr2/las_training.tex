@@ -1,5 +1,23 @@
+% corrected LN 97
+
 \subsubsection{FR02: Showcase usage of LAS implementation and training in an HPC environment.}
 
-testtsetetest.
+The following script \textit{job\_launcher\_script.sh}, requests the needed resources and executes the application when scheduled for a job on the HPC:
 
 \lstinputlisting{sections/technical/fr2/slurm_script.sh}
+
+This job launcher requests one computing node with the argument $-N \ 1$. On this computing node, 8 CPU cores and 1 GPU are requested with the arguments $-n \ 8$ and $-G \ 1$ respectively. To use GPUs in the computing node, the launcher has to enable $-p \ gpu$. On line 18, it activates the virtual environment so that the Python application can be executed.\\
+
+The run the LAS model in training mode, the launcher script executes the followin command:
+
+\begin{lstlisting}
+$ python3 main.py --config $config_file --logdir $log_dir --name $model_name
+\end{lstlisting}
+
+where \textit{\$config\_file} is the file defining the model's hyperparameters, \textit{\$log\_dir} is the directory name for logging the tensorboard data and \textit{\$model\_name} is the name under which a checkpoint of the model will be made.\\
+
+To submit our application to the queue for execution, we run the following command in the HPC user shell which schedules the SLURM job launcher:
+
+\begin{lstlisting}
+$ sbatch job_launcher_script.sh
+\end{lstlisting}
