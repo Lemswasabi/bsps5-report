@@ -15,7 +15,7 @@ In this experiment, we will train multiple LAS models without the encoder having
 
 \lstinputlisting{sections/scientific/nfr1/non_pyramidal_encoder_config.yaml}
 
-The model's encoder is configured with 5 BLSTM layers each composed of 512 units. No dropout is applied to the output of the encoder. The attention mechanism is based on location awareness and contains 300 units.\cite{chorowski2015attentionbased} Further, the decoder includes 1 LSTM layer of 512 units. The model uses the \textit{Adadelta} optimizer which is a stochastic gradient descent method. It is set to train from $1000001 \ steps$ and validates the model at each $5000 \ steps$ intervals. Although, the training of the model stops earlier before $1000001 \ steps$ since the runtime on the HPC is restricted to 2 days.\\
+The model's encoder is configured with 5 BLSTM layers each composed of 512 units. No dropout is applied to the output of the encoder. The attention mechanism is based on location awareness and contains 300 units.\cite{chorowski2015attentionbased} Further, the decoder includes 1 LSTM layer of 512 units. The model uses the \textit{Adadelta} optimizer which is a stochastic gradient descent method. It is set up to train until $1000001 \ steps$ and validates the model at each $5000 \ steps$ intervals. Although, the training of the model stops earlier before $1000001 \ steps$ since the runtime on the HPC is restricted to 2 days.\\
 
 For this configuration, we investigate 4 different experiments:
 
@@ -43,7 +43,7 @@ In this experiment, we train the model on 100h of the LibriSpeech corpus to lear
   \label{100_chars}
 \end{figure}
 
-When evaluating the model on the testing dataset from the LibriSpeech, which contains 2,620 examples, it achieves a WER of 24\% as well as seen in Table \ref{table:test_100_chars}.
+When evaluating the model on the testing dataset from the LibriSpeech dataset, which contains 2,620 examples, it achieves a WER of 24\% as seen in Table \ref{table:test_100_chars}.
 
 \begin{table}[ht]
 		\centering
@@ -58,7 +58,7 @@ When evaluating the model on the testing dataset from the LibriSpeech, which con
 
 \paragraph{100h: Predicting characters with a word dictionary}
 
-The same configured model was trained on 100h of training data but uses a word dictionary to constrain the search space to valid words when decoding. The training visualization is illustrated in Fig. \ref{100_words}. The model achieves a validation WER of 25\%. When evaluating the model on the same testing dataset, it achieves a testing WER of 25.1\% as seen in Table \ref{table:test_100_words}. The result shows that a word dictionary is not necessary when decoding the output of the model.
+The same configured model was trained on 100h of training data but it uses a word dictionary to constrain the search space to valid words when decoding. The training visualization is illustrated in Fig. \ref{100_words}. The model achieves a validation WER of 25\%. When evaluating the model on the same testing dataset, it achieves a testing WER of 25.1\% as seen in Table \ref{table:test_100_words}. The result shows that a word dictionary is not necessary when decoding the output of the model since the model is able to learn spelling real words right most of the time.
 
 \begin{figure}[ht]
   \centering
@@ -164,6 +164,7 @@ In this section, we will fine-tune the beam width $\beta$ during decoding of our
 		\label{table:beam_width}
 \end{table}
 
+Interpreting the results in Table \ref{table:beam_width}, we deduce that a higher beam width $\beta$ decreases the average WER of the LAS model.
 
 \subsubsection{Attention Visualization}
 The attention alignment of the audio signal of a validation utterance is visualized in Fig. \ref{attention_alignment}. The model was able to identify the start and the end of the utterance, although it outputs the phrase \textit{"a man was looking in from the quarter behind at the four persons we were just discussing"} instead of \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}. There is only one word which is spelt wrongly.
@@ -174,3 +175,20 @@ The attention alignment of the audio signal of a validation utterance is visuali
   \caption{Audio signal and the attention alignment produced for the utterance \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}.}
   \label{attention_alignment}
 \end{figure}
+
+\subsubsection{Performance comparison}
+
+Looking at the results of other speech recognition models in Table \ref{table:result_comparison}, our experiments with the LAS model didn't perform as well as others. An explanation for the higher error rate is that we did not train our model with the entire LibriSpeech dataset.
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|} \hline
+				{Model} & {WER (\%)}\\ \hline
+				\makecell{Conformer + Wav2vec 2.0 +\\SpecAugment-based Noisy\\Student Training with Libri-Light} & {1.4}\\ \hline
+				{Las} & {2.7}\\ \hline
+				\textbf{Our LAS experiment} & {13.8}\\ \hline
+		\end{tabular}
+		\caption{Comparison of Speech Recognition models on LibriSpeech \textit{test-clean} dataset.}
+		\label{table:result_comparison}
+\end{table}
+
