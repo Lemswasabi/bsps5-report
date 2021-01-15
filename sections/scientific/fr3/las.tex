@@ -42,7 +42,7 @@ Bidirectional RNNs stack an additional hidden layer on top of an existing RNN wh
 
 \input{sections/scientific/fr3/bidirectional_model.tex}
 
-For each time step $t$, let a minibatch input $\bm{X_t} \in \mathbb{R}^{n \times d}$, where $n$ is the number of examples and $d$ is the number of input for each example. We define $\phi$ as activation funciton of the hidden layer. In the bidirectional design, it is assumed that at time step $t$ the forward and backward hidden states are $\overrightarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$ and $\overleftarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$, respectively, where $h$ represents the number of hidden units. The update equations for the forward and backward hidden states are defined as follows:
+For each time step $t$, let a minibatch input $\bm{X_t} \in \mathbb{R}^{n \times d}$, where $n$ is the number of examples and $d$ is the number of inputs for each example. We define $\phi$ as activation funciton of the hidden layer. In the bidirectional design, it is assumed that at time step $t$ the forward and backward hidden states are $\overrightarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$ and $\overleftarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$, respectively, where $h$ represents the number of hidden units. The update equations for the forward and backward hidden states are defined as follows:
 
 \begin{align}
 	\overrightarrow{\bm{H}}_t &= \phi(X_tW_{xh}^{(f)}+\overrightarrow{H}_{t-1}W_{hh}^{(f)}+b_h^{(f)})\\
@@ -115,7 +115,7 @@ Although during inference, the expected results are not available. Thus the pred
 	\max_\theta \sum_i log P(y_i|x,\tilde{y}_{<i};\theta)
 \end{equation}
 
-where $\tilde{y_{i-i}}$ is the ground truth character or a character sampled from the model.
+where $\tilde{y_{i-1}}$ is the ground truth character or a character sampled from the model.
 
 \paragraph{Decoding} % corrected 86
 

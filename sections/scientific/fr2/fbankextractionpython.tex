@@ -37,7 +37,7 @@ The function \textit{fbank()} returns a \textit{torch.Tensor} with the dimension
 with $padded\_window\_size // 2 + 1$ being the number of frames and $m$ the number of Mel-filters.
 \item The last step is to flatten this matrix to a vector which can be stored in a data frame for later training.
 \begin{lstlisting}
-row = filterbank.transpose(0, 1).unsqueeze(0).detach()
+row = filterbank.transpose(0, 1).unsqueeze(0)
 \end{lstlisting}
 After this operation, the matrix $filterbank$ is transposed and flattened. This concatenates the columns of $filterbank$ together forming a vector.
 \end{enumerate}

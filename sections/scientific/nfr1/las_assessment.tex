@@ -1,6 +1,6 @@
 \subsubsection{NFR01: Performance evaluation and comparison}~\label{las_assessment} % corrected LN 89
 
-In this section, the performance of the LAS architecture will be evaluated. For this analysis study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formatted file. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Additionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}
+In this section, the performance of the LAS architecture will be evaluated. For this analysis study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formatted files. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Additionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}\\
 
 First of all, we define a couple of configurations which will set up the hyperparameters of the LAS model to perform different experiments:
 
@@ -43,7 +43,7 @@ In this experiment, we train the model on 100h of the LibriSpeech corpus to lear
   \label{100_chars}
 \end{figure}
 
-When evaluating the model on the testing dataset from the LibriSpeech dataset, which contains 2,620 examples, it achieves a WER of 24\% as seen in Table \ref{table:test_100_chars}.
+When evaluating the model on the testing dataset from the LibriSpeech corpus, which contains 2,620 examples, it achieves a WER of 24\% as seen in Table \ref{table:test_100_chars}.
 
 \begin{table}[ht]
 		\centering
@@ -128,12 +128,12 @@ In this experiment, we will train a LAS model with the SpecAugment architecture.
 
 \lstinputlisting{sections/scientific/nfr1/spec_augment.yaml}
 
-The model has almost the same structure as in the previous experiment. However, the encoder is configured with 4 BLSTM layers instead of 5, each composed of 1024 units. In this experiment, the model was trained on 460h of training data without using a dictionary for decoding. The training visualization is illustrated in Fig. \ref{460_specaugment}. The model achieves a validation WER of 15\%. When evaluating the model on the testing dataset, it achieves a testing WER of 15.5\% as seen in Table \ref{table:test_460_specaugment}. The result shows that this architecture did not improve the performance of the model over the previous architecture.
+The model has almost the same structure as in the previous experiment. However, the encoder is configured with 4 BLSTM layers instead of 5, each composed of 1024 units. In this experiment, the model was trained on 460h of training data without using a dictionary for decoding. The training visualization is illustrated in Fig. \ref{460_specaugment}. The model achieves a validation WER of 15\%. When evaluating the model on the testing dataset, it achieves a testing WER of 15.5\% as seen in Table \ref{table:test_460_specaugment}. The result shows that this architecture did not improve the performance of the model compared to the previous architecture.
 
 \begin{figure}[ht]
   \centering
 	\includegraphics[scale=0.2]{figures/460_specaugment.png}
-  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \caption{Training on 460h of the LibriSpeech corpus with the SpecAugment architecture. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
   \label{460_specaugment}
 \end{figure}
 
@@ -150,7 +150,7 @@ The model has almost the same structure as in the previous experiment. However, 
 
 \subsubsection{Beam Width}
 
-In this section, we will fine-tune the beam width $\beta$ during decoding of our best candidate found in section \ref{best_candidate}.
+In this section, we will test different beam widths $\beta$ during decoding of our best candidate found in section \ref{best_candidate}.
 
 \begin{table}[ht]
 		\centering
@@ -185,7 +185,7 @@ Looking at the results of other speech recognition models in Table \ref{table:re
 		\begin{tabular}{|c|c|} \hline
 				{Model} & {WER (\%)}\\ \hline
 				\makecell{Conformer + Wav2vec 2.0 +\\SpecAugment-based Noisy\\Student Training with Libri-Light} & {1.4}\\ \hline
-				{Las} & {2.7}\\ \hline
+				{LAS} & {2.7}\\ \hline
 				\textbf{Our LAS experiment} & {13.8}\\ \hline
 		\end{tabular}
 		\caption{Comparison of Speech Recognition models on LibriSpeech \textit{test-clean} dataset.}

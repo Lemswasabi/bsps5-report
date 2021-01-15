@@ -8,7 +8,7 @@ The following script \textit{job\_launcher\_script.sh}, requests the needed reso
 
 This job launcher requests one computing node with the argument $-N \ 1$. On this computing node, 8 CPU cores and 1 GPU are requested with the arguments $-n \ 8$ and $-G \ 1$ respectively. To use GPUs in the computing node, the launcher has to enable $-p \ gpu$. On line 18, it activates the virtual environment so that the Python application can be executed.\\
 
-The run the LAS model in training mode, the launcher script executes the followin command:
+To run the LAS model in training mode, the launcher script executes the following command:
 
 \begin{lstlisting}
 $ python3 main.py --config $config_file --logdir $log_dir --name $model_name
