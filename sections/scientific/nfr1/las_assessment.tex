@@ -1,0 +1,194 @@
+\subsubsection{NFR01: Performance evaluation and comparison}~\label{las_assessment} % corrected LN 89
+
+In this section, the performance of the LAS architecture will be evaluated. For this analysis study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formatted files. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Additionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}\\
+
+First of all, we define a couple of configurations which will set up the hyperparameters of the LAS model to perform different experiments:
+
+\begin{itemize}
+	\item Non-pyramidal encoder
+	\item SpecAgument LAS architecture
+\end{itemize}
+
+\subsubsection{LAS model with non-pyramidal encoder}
+
+In this experiment, we will train multiple LAS models without the encoder having a pyramidal form. The hyperparameters for this model look as follows:
+
+\lstinputlisting{sections/scientific/nfr1/non_pyramidal_encoder_config.yaml}
+
+The model's encoder is configured with 5 BLSTM layers each composed of 512 units. No dropout is applied to the output of the encoder. The attention mechanism is based on location awareness and contains 300 units.\cite{chorowski2015attentionbased} Further, the decoder includes 1 LSTM layer of 512 units. The model uses the \textit{Adadelta} optimizer which is a stochastic gradient descent method. It is set up to train until $1000001 \ steps$ and validates the model at each $5000 \ steps$ intervals. Although, the training of the model stops earlier before $1000001 \ steps$ since the runtime on the HPC is restricted to 2 days.\\
+
+For this configuration, we investigate 4 different experiments:
+
+\begin{itemize}
+	\item Training on 100h of the LibriSpeech corpus
+		\begin{itemize}
+			\item Predicting characters
+			\item Predicting characters constrained with a word dictionary
+		\end{itemize}
+	\item Training on 460h of the LibriSpeech corpus
+		\begin{itemize}
+			\item Predicting characters
+			\item Predicting characters constrained with a word dictionary
+		\end{itemize}
+\end{itemize}
+
+\paragraph{100h: Predicting characters}
+
+In this experiment, we train the model on 100h of the LibriSpeech corpus to learn predicting characters from the acoustic features without a word dictionary. The training visualization is illustrated in Fig. \ref{100_chars}. The model was able to reduce the loss during training and the loss converges to zero. The Word Error Rate (WER) metric is used as a performance measure. The WER is derived from the Levenshtein distance which computes the difference between two string sequences. During training, the model achieves a WER close to 0\%. Whereas, during validation the LAS model reaches a 24\% WER.
+
+\begin{figure}[H]
+  \centering
+	\includegraphics[scale=0.2]{figures/100_chars.png}
+  \caption{Training on 100h of the LibriSpeech corpus. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{100_chars}
+\end{figure}
+
+When evaluating the model on the testing dataset from the LibriSpeech corpus, which contains 2,620 examples, it achieves a WER of 24\% as seen in Table \ref{table:test_100_chars}.
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {10.2} & {9.3}\\ \hline
+				{Word} & {24} & {18.8}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_100_chars}
+\end{table}
+
+\paragraph{100h: Predicting characters with a word dictionary}
+
+The same configured model was trained on 100h of training data but it uses a word dictionary to constrain the search space to valid words when decoding. The training visualization is illustrated in Fig. \ref{100_words}. The model achieves a validation WER of 25\%. When evaluating the model on the same testing dataset, it achieves a testing WER of 25.1\% as seen in Table \ref{table:test_100_words}. The result shows that a word dictionary is not necessary when decoding the output of the model since the model is able to learn spelling real words right most of the time.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/100_words.png}
+  \caption{Training on 100h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{100_words}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {13.9} & {18.9}\\ \hline
+				{Word} & {25.1} & {23.6}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_100_words}
+\end{table}
+
+\paragraph{460h: Predicting characters}\label{best_candidate}
+
+This time, the model was trained on 460h of the LibriSpeech corpus. The training visualization is illustrated in Fig. \ref{460_chars}. The model achieves a validation WER of 13\%. When evaluating the model on the testing dataset, it achieves a testing WER of 14.1\% as seen in Table \ref{table:test_460_chars}.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/460_chars.png}
+  \caption{Training on 460h of the LibriSpeech corpus. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{460_chars}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {5.8} & {7.3}\\ \hline
+				{Word} & {14.1} & {15.3}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_460_chars}
+\end{table}
+
+\paragraph{460h: Predicting characters with a word dictionary}
+
+In this experiment, the model was trained on 460h of training data as well but constrains the decoding of the output with a word dictionary. The training visualization is illustrated in Fig. \ref{460_words}. The model achieves a validation WER of 13\%. When evaluating the model on the testing dataset, it achieves a testing WER of 14.9\% as seen in Table \ref{table:test_460_words}. The result shows as well that a word dictionary is not necessary when decoding the output of the model.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/460_words.png}
+  \caption{Training on 460h of the LibriSpeech corpus with a dictionary. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{460_words}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {7.7} & {34.3}\\ \hline
+				{Word} & {14.9} & {40.6}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_460_words}
+\end{table}
+
+\subsubsection{SpecAugment LAS architecture}
+
+In this experiment, we will train a LAS model with the SpecAugment architecture.\cite{Park_2019} The hyperparameters for this model look as follows:
+
+\lstinputlisting{sections/scientific/nfr1/spec_augment.yaml}
+
+The model has almost the same structure as in the previous experiment. However, the encoder is configured with 4 BLSTM layers instead of 5, each composed of 1024 units. In this experiment, the model was trained on 460h of training data without using a dictionary for decoding. The training visualization is illustrated in Fig. \ref{460_specaugment}. The model achieves a validation WER of 15\%. When evaluating the model on the testing dataset, it achieves a testing WER of 15.5\% as seen in Table \ref{table:test_460_specaugment}. The result shows that this architecture did not improve the performance of the model compared to the previous architecture.
+
+\begin{figure}[ht]
+  \centering
+	\includegraphics[scale=0.2]{figures/460_specaugment.png}
+  \caption{Training on 460h of the LibriSpeech corpus with the SpecAugment architecture. The upper plot shows the loss of the training. The lower plot shows the training WER in red and the validation WER in blue.}
+  \label{460_specaugment}
+\end{figure}
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Error Rate (\%)} & {Mean} & {$\sigma$}\\ \hline
+				{Character} & {6.8} & {8.3}\\ \hline
+				{Word} & {15.5} & {16.7}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model on the testing dataset \textit{test\_clean}.}
+		\label{table:test_460_specaugment}
+\end{table}
+
+\subsubsection{Beam Width}
+
+In this section, we will test different beam widths $\beta$ during decoding of our best candidate found in section \ref{best_candidate}.
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|c|} \hline
+				{Beam width $\beta$} & {WER (\%)}\\ \hline
+				{2} & {14.1}\\ \hline
+				{8} & {13.79}\\ \hline
+				{16} & {13.80}\\ \hline
+		\end{tabular}
+		\caption{Evaluation of the model trained on 460h training data with different beam width $\beta$ on the testing dataset \textit{test\_clean}.}
+		\label{table:beam_width}
+\end{table}
+
+Interpreting the results in Table \ref{table:beam_width}, we deduce that a higher beam width $\beta$ decreases the average WER of the LAS model.
+
+\subsubsection{Attention Visualization}
+The attention alignment of the audio signal of a validation utterance is visualized in Fig. \ref{attention_alignment}. The model was able to identify the start and the end of the utterance, although it outputs the phrase \textit{"a man was looking in from the quarter behind at the four persons we were just discussing"} instead of \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}. There is only one word which is spelt wrongly.
+
+\begin{figure}[H]
+  \centering
+  \includegraphics[scale=0.17]{attention_alignment.png}
+  \caption{Audio signal and the attention alignment produced for the utterance \textit{"a man was looking in from the corridor behind at the four persons we were just discussing"}.}
+  \label{attention_alignment}
+\end{figure}
+
+\subsubsection{Performance comparison}
+
+Looking at the results of other speech recognition models in Table \ref{table:result_comparison}, our experiments with the LAS model didn't perform as well as others. An explanation for the higher error rate is that we did not train our model with the entire LibriSpeech dataset.
+
+\begin{table}[ht]
+		\centering
+		\begin{tabular}{|c|c|} \hline
+				{Model} & {WER (\%)}\\ \hline
+				\makecell{Conformer + Wav2vec 2.0 +\\SpecAugment-based Noisy\\Student Training with Libri-Light} & {1.4}\\ \hline
+				{LAS} & {2.7}\\ \hline
+				\textbf{Our LAS experiment} & {13.8}\\ \hline
+		\end{tabular}
+		\caption{Comparison of Speech Recognition models on LibriSpeech \textit{test-clean} dataset.}
+		\label{table:result_comparison}
+\end{table}
+

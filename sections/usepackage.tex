@@ -1,0 +1,75 @@
+\usepackage{hyperref}
+\usepackage{datetime}
+\usepackage[table]{xcolor}
+\usepackage{dsfont}
+\usepackage{float}
+\restylefloat{table}
+\usepackage{pgfplots}
+\pgfplotsset{width=8cm,compat=1.9}
+\usepackage{graphicx}
+\graphicspath{{./figures/}}
+\usepackage{multirow}
+\usepackage{enumitem}
+\usepackage{bm}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{tikz}
+\usepackage{subfig}
+\usepackage{titlesec}
+\usepackage{makecell}
+\usetikzlibrary{arrows, positioning, fit, arrows.meta, shapes}
+\newcommand{\empt}[2]{$#1^{\langle #2 \rangle}$}
+
+\newenvironment{normalize}{\leftskip-\leftmargin}{\par}
+\usepackage{listings}
+\usepackage{xcolor}
+\usepackage[normalem]{ulem}
+
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
+}
+\lstset{style=mystyle, language=Python}
+
+\usetikzlibrary{positioning}
+\tikzstyle{inputNode}=[draw,circle,minimum size=10pt,inner sep=0pt]
+\tikzstyle{stateTransition}=[-stealth, thick]
+
+% *** CITATION PACKAGES ***
+\ifCLASSOPTIONcompsoc
+  \usepackage[nocompress]{cite}
+\else
+  \usepackage{cite}
+\fi
+
+% correct bad hyphenation
+\hyphenation{op-tical net-works semi-conduc-tor}
+
+\pagestyle{plain} % show number of pages
+
+\setcounter{secnumdepth}{4}
+
+\titleformat{\paragraph}
+{\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
+\titlespacing*{\paragraph}
+{0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}

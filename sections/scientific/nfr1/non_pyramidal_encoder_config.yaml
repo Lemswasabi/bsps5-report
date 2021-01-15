@@ -1,0 +1,23 @@
+hparas:
+  valid_step: 5000
+  max_step: 1000001
+  optimizer: 'Adadelta'
+  lr: 1.0
+
+model:
+
+  encoder:
+    module: 'LSTM'
+    bidirection: True
+    dim: [512,512,512,512,512]
+    dropout: [0,0,0,0,0]
+
+  attention:
+    mode: 'loc'
+    dim: 300
+
+  decoder:
+    module: 'LSTM'
+    dim: 512
+    layer: 1
+    dropout: 0

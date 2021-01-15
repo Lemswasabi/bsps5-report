@@ -1,0 +1,128 @@
+% corrected LN 96
+
+\subsubsection{FR03: Investigation of the architecture of an attention-based sequence to sequence model.}
+
+\paragraph{Introduction}
+
+In this section, the \textit{Listen, Attend and Spell} (LAS) model will be investigated and presented based on its paper\cite{chan2015listen} and some definitions found in the \textit{Dive into Deep Learning} textbook.\cite{zhang2020dive} LAS is a model which takes acoustic features as inputs and outputs characters as outputs. We define, $x \ = \ (x_1,...,x_T)$ an input sequence containing Mel-filterbank features and $y \ = \ (\langle sos\rangle,y_1,...,y_S,\langle eos\rangle)$ an ouput sequence of characters where $y_i \in \{a,b,...,z,0,...,9,\langle \ \rangle,\langle ,\rangle,\langle .\rangle,\langle '\rangle, \langle unk\rangle\}$. The tokens $\langle sos\rangle$ and $\langle eos\rangle$ represent the start and end of a sentence respectively. The LAS model represents a conditional distribution over previous characters $y_j$ where $j < i$ and the input signal $x$ for each output character $y_i$. Using the chaing rule, we get:
+
+\begin{equation}
+	P(y|x) = \prod_{i} P(y_i|x,y_j)
+\end{equation}
+
+This model is composed of two modules: the listener and the speller. The listener $Listen$ represents an acoustic model encoder, while the speller $AttendAndSpell$ is an attention-based character decoder. The first module converts the input signal $x$ into a higher-level feature representation $h$, whereas the speller module processes $h$ as input and computes a probability distribution over a sequence of characters. A representation of the LAS model with these two modules is given in Fig. \ref{las_model}.
+
+\begin{align}
+	h &= Listen(x)\\
+	P(y|x) &= AttendAndSpell(h,y)
+\end{align}
+
+\begin{figure}[h]
+  \centering
+  \includegraphics[scale=0.18]{las_architecture.jpg}
+	\caption{Representation of Listen, Attend and Spell (LAS) model.\cite{las_model} The listener, a pyramidal BLSTM, encodes the input signal $x$ to a higher level feature representation $h$, while the speller decodes the output $y$ from this high level representation $h$.}
+  \label{las_model}
+\end{figure}
+
+\paragraph{Sequence to sequence learning} % corrected 84
+
+Despite deep neural networks being successfully used in various classification applications which categorise fixed input vectors to output classes, to process variable-length sequences, neural networks are combined with sequential models such as Hidden Markov Models (HMMs). These combined models result in a statistical machine translation instead of an end-to-end neural machine translation. The disadvantage is that statistical models are difficult to be trained end-to-end.\cite{chan2015listen} The encoder-decoder architecture copes with this drawback. Models based on this architecture can process input and output sequences of variable lengths. This architecture design is built on two main components. The first is called the encoder which transforms a variable-length sequence into a fixed shape representation. The other component is the decoder and it maps this fixed representation to a variable-length sequence.\cite{zhang2020dive} An illustration of this architecture is given in Fig. \ref{encoder_decocer}.
+
+\input{sections/scientific/fr3/encoder_decoder.tex}
+
+Sequence to sequence learning is a process based on the encoder-decoder architecture. During training, the model provides the decoder with the labels, while during inference, the model executes a beam search to obtain a relevant output for later predictions.
+
+These models are improved when combined with an attention mechanism. It supplies the decoder more information when producing the output. This mechanism propagates information more effectively from the encoder to the decoder at each time step.
+
+This learning framework has been applied to many domains, such as machine translation, image captioning, etc. This learning process is not limited to a particular domain and it could be applied to build ASR systems.
+
+\paragraph{Bidirectional RNN} % corrected 99
+
+Bidirectional RNNs stack an additional hidden layer on top of an existing RNN which runs forward from the first token. This stacked hidden layer passes information backwards from the last token to the front. This mechanism in RNNs reproduces a look-ahead ability similar to the one found in HMMs.\cite{zhang2020dive} An illustration of a bidirectional RNN's architecture with a single hidden layer is given in Fig. \ref{bidirectional_rnn}.
+
+\input{sections/scientific/fr3/bidirectional_model.tex}
+
+For each time step $t$, let a minibatch input $\bm{X_t} \in \mathbb{R}^{n \times d}$, where $n$ is the number of examples and $d$ is the number of inputs for each example. We define $\phi$ as activation funciton of the hidden layer. In the bidirectional design, it is assumed that at time step $t$ the forward and backward hidden states are $\overrightarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$ and $\overleftarrow{\bm{H}}_t \in \mathbb{R}^{n \times h}$, respectively, where $h$ represents the number of hidden units. The update equations for the forward and backward hidden states are defined as follows:
+
+\begin{align}
+	\overrightarrow{\bm{H}}_t &= \phi(X_tW_{xh}^{(f)}+\overrightarrow{H}_{t-1}W_{hh}^{(f)}+b_h^{(f)})\\
+	\overleftarrow{\bm{H}}_t &= \phi(X_tW_{xh}^{(b)}+\overleftarrow{H}_{t+1}W_{hh}^{(b)}+b_h^{(b)})
+\end{align}
+
+where the weights $W_{xh}^{(f)} \in \mathbb{R}^{d \times h}$, $W_{hh}^{(f)} \in \mathbb{R}^{h \times h}$, $W_{xh}^{(b)} \in \mathbb{R}^{d \times h}$ and $W_{hh}^{(b)} \in \mathbb{R}^{h \times h}$, and biases $b_h^{(f)} \in \mathbb{R}^{1 \times h}$ and $b_h^{(b)} \in \mathbb{R}^{1 \times h}$ represent the model's parameters.\\
+
+To compute the hidden state $\bm{H}_t \in \mathbb{R}^{n \times 2h}$ which will be the input of the output layer, the forward and backward hidden states $\overrightarrow{\bm{H}}_t$ and $\overleftarrow{\bm{H}}_t$ are concatenated. This hidden state $\bm{H}_t$ is passed as input to the next bidirectional layer in a deep bidirectional RNN with different hidden layers. The last layer of a bidirectional RNN computes the output $\bm{O}_t$:
+
+\begin{equation}
+	\bm{O}_t = \bm{H}_tW_{hq}+b_q
+\end{equation}
+
+where $W_{hq} \in \mathbb{R}^{2h \times q}$ is the weight matrix, $b_q \in \mathbb{R}^{1 \times q}$ is the bias vector and $q$ is the number of outputs.
+
+\paragraph{Listen} % corrected 86
+
+The $Listen$ operation is defined by a Bidirectional LSTM RNN (BLSTM) which is structured into a pyramid. This pyramidal structure reduces the length of input $x$ from $T$ to the length $U$ of $h$. Applying the BLSTM directly to the $Listen$ operation will converge slowly and performs poorly since the $AttendAndSpell$ operation has difficulties to extract useful information from larger input sequences.\cite{chan2015listen} To mitigate this issue, a pyramid BLSTM (pBLSTM) is used. At each stacked pBLSTM layer, the time resolution of the input is decreased by a factor of 2. In normal deep BLSTM RNNs, the output at the $i$-th time step and $j$-th layer is computed as follows:
+
+\begin{equation}
+	h_i^j = BLSTM(h_{i-1}^j, h_i^{j-1})
+\end{equation}
+
+Compared to the BLSTM architecture, the pBLSTM model concatenates the outputs of consecutive steps of each layer and passes it to the next layer:
+
+\begin{equation}
+	h_i^j = pBLSTM(h_{i-1}^j, \lbrack h_{2i}^{j-1}, h_{2i+1}^{j-1}\rbrack)
+\end{equation}
+
+The LAS model stacks 3 pBLSTMs above the BLSTM input layer. This decreases the time resolution $2^3 = 8$ times, allowing the attention model to derive important information from an input sequence with fewer time steps. An illustration of the $Listen$ operation is given in Fig. \ref{las_model}
+
+\paragraph{Attend and Spell} % corrected 99
+
+The $AttendAndSpell$ operation uses an attention-based LSTM transducer to compute at every output step a probability distribution over the next character based on all the characters seen before. The context vector $c_i$ is generated by an attentation mechanism. The decoder state $s_i$ is computed from the previous state $s_{i-1}$, the previously produced character $y_{i-1}$ and the context $c_{i-1}$. Further, the probability distribution $y_i$ is a function of the decoder state $s_i$ and the context $c_i$. Respectively,
+
+\begin{align}
+	c_i &= AttentionContext(s_i,h)\\
+	s_i &= RNN(s_{i-1}, y_{i-1}, c_{i-1})\\
+	P(y_i|x, y_{<i}) &= CharacterDistribution(s_i,c_i)
+\end{align}
+
+where $CharacterDistribution$ represents an MLP which character outputs are activated by a softmax function and $RNN$ is equal to a 2 layer LSTM network.\\
+
+At each timestep $i$ of the decoder, the $AttentionContext$ function generates for each timestep $u$ a scalar energy $e_{i,u}$ from $h_u \in h$ and $s_i$. The scalar energy $e_{i,u}$ is transformed into a probability distribution $\alpha_{i,u}$ over timesteps applying a softmax function. This distribution is used to create the context vector $c_i$ when linearly blending it with the listener features $h_u$ at different timesteps:
+
+\begin{align}
+	e_{i,u} &= \langle \phi(s_i), \psi(h_u)\rangle\\
+	\alpha_{i,u} &= \frac{exp(e_{i,u})}{\sum_u exp(e_{i,u})}\\
+	c_i &= \sum_u \alpha_{i,u}h_u
+\end{align}
+
+where $\phi$ and $\psi$ are MLP networks. $c_i$ can be interpreted as a collection of weighted features of h. Fig. \ref{las_model} illustrates the operation $AttendAndSpell$.
+
+\paragraph{Learning} % corrected 98
+
+The $Listen$ and $AttendAndSpell$ operations are trained jointly for end-to-end speech recognition. This sequence to sequence model conditions the next step prediction on the previously emitted characters and tries to maximize the log probability:
+
+\begin{equation}
+	\max_{\theta} \sum_i log P (y_i|x, y_{<i}^*;\theta)
+\end{equation}
+
+Although during inference, the expected results are not available. Thus the predictions of the model can deteriorate since it was not trained to be resistant against bad prediction inputs at any time steps. To deal with this during training, we sample from the previous character distribution and use it as input for the next step prediction instead of always feeding the ground truth label:
+
+\begin{equation}
+	\tilde{y_i} \sim CharacterDistribution(s_i,c_i)
+\end{equation}
+
+\begin{equation}
+	\max_\theta \sum_i log P(y_i|x,\tilde{y}_{<i};\theta)
+\end{equation}
+
+where $\tilde{y_{i-1}}$ is the ground truth character or a character sampled from the model.
+
+\paragraph{Decoding} % corrected 86
+
+During inference the LAS model finds the most probable character sequence given the acoustic input:
+
+\begin{equation}
+	\hat{y} = arg \max_{y} log P(y|x)
+\end{equation}
+
+A left-to-right beam search algorithm is used to perform decoding. A set of $\beta$ incomplete hypothesis is initialized each starting with the start-of-sentence $\langle sos \rangle$ token. Each hypothesis in the beam is expanded at each time step with every possible character. Only the $\beta$ most probable beams are retained. When reaching the end-of-sentence $\langle sos \rangle$ token, the candidate is removed from the beam and placed to the completed hypothesis. A word dictionary can be added to the decoding phase. However, as observed from the experiments in section \ref{las_assessment}, this is not necessary because the LAS model learns to spell real words most of the time.

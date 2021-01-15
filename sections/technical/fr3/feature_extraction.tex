@@ -1,0 +1,34 @@
+% corrected LN 98
+
+\subsubsection{FR03: Introduce a feature extraction program for the LibriSpeech dataset.}
+
+In this section, we present our program which extracts the Mel-filterbank features from the LibriSpeech dataset. Although, this program should not be used if end-to-end ASR is desired. The program executes the following steps:
+
+\begin{enumerate}
+	\item process\_flac2wav()\\
+
+		This function parses the LibriSpeech file directories and converts all audio files, formatted as FLAC files, to WAV files.\\
+
+	\item process\_wav2speech\_feature()\\
+
+		This function parses the LibriSpeech file directories and extracts the Mel-filterbanks from the WAV files.\\
+
+	\item process\_speech\_feature2dataset(train\_file\_list, train\_path, 'train.CSV')\\
+
+		This function creates a CSV file for the training dataset which contains examples with the file path to the extracted features and their label.\\
+
+	\item process\_speech\_feature2dataset(dev\_file\_list, dev\_path, 'dev.CSV')\\
+
+		This function creates a CSV file for the validation dataset which contains examples with the file path to the extracted features and their label.\\
+
+	\item process\_speech\_feature2dataset(test\_file\_list, test\_path, 'test.CSV')\\
+
+		This function creates a CSV file for the testing dataset which contains examples with the file path to the extracted features and their label.\\
+
+	\item save\_vocab()\\
+
+		This function saves the character vocabulary list to a CSV file.\\
+
+\end{enumerate}
+
+A listing of this program is provided in the Appendix.

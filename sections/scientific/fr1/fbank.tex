@@ -1,0 +1,55 @@
+% corrected LN 96
+
+\subsubsection{FR01: Feature extraction of Mel-Filterbanks}\label{fbank}
+
+% introduction
+
+Before training an end-to-end ASR model, audio data have to be preprocessed. The first task is to extract low-level features from the data which describe natural language expressions and exclude background noises and emotions. Speech processing is an important process when creating ASR systems. For a long period, Mel-Frequency Cepstral Coefficients (MFCCs) were the most popular features. However, Mel-Filterbanks are recently getting more prominent with applications in deep learning. Computing both features contain the same approach where both of them calculate filterbanks, but MFCCs include an additional step of applying Discrete Cosine Transform (DCT) to decorrelate the features. While this is preferred for most of the traditional machine learning algorithms, in DNNs it is not necessary since they are less susceptible to highly correlated input \cite{fayek2016}. Note that DCT is a linear transform, therefore, it discards some non-linear information in speech signals, which is not desirable in DNNs.\\
+
+To extract the Mel-Filterbanks from the dataset, the following extraction steps have to be executed on a speech signal sampled at $16kHz$:\\
+
+\begin{enumerate}[label=\arabic*.]
+  \item Frame the signal into $25ms$ frames. The frame length of a $16kHz$ signal:
+  \begin{equation} 
+    0.025*16000 = 400 samples.
+  \end{equation}
+  With a frame step of $160\ samples$ or $10ms$, the frames overlap themselves, such that the first frame containing $400\ samples$ starts at sample 0 and the second frame starts at sample 160. This pattern repeats until the end of the speech signal. If the audio file is not divisible by an even number, it is padded by zeros.\\
+  \item For each frame calculate the periodogram estimate of the power spectrum.  To obtain the Discrete Fourier Transform (DFT) from the frame $i$, we perform:
+    \begin{equation}
+      S_{i}(k) = \sum_{N}^{n=1}s_i(n)h(n)e^{-j2\pi kn/N}
+    \end{equation}
+    For each speech frame $s_{i}(n)$, the periodogram-based power spectral estimate is calculated with:
+    \begin{equation}
+      P_{i}(k)=\frac{1}{N}{\mid{S_{i}(k)}\mid}^{2}
+    \end{equation}
+  This is called the Periodogram estimate of the power spectrum which identifies for every frame which frequencies are present.\\
+\item Apply the Mel-filterbank to the power spectrum and sum the energy in each filter. The Mel-filterbank is a set of 40 triangular filters. Each filter within the filterbank is triangle shaped with a value of 1 at its frequency center and decreases to 0 reaching the center of the neighboring filter. This Filterbank on a Mel-Scale is shown in Fig. \ref{mel-filterbank}.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{filterbank_mel_scale.png}
+    \caption{Filterbank on a Mel-Scale.\cite{fayek2016}}
+    \label{mel-filterbank}
+  \end{figure}
+
+  The filterbank energies are calculated by multiplying every filterbank with the power spectrum of the signal. The resulting spectrogram can be seen in Fig. \ref{spectrogram}.\\
+  
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{spectrogram_of_signal.png}
+    \caption{The spectrogram of the signal.\cite{fayek2016}}
+    \label{spectrogram}
+  \end{figure}
+
+  To obtain the Mel-filterbank features, the mean of each coefficient is substracted from all frames. The mean-normalized Mel-Filterbanks is show in Fig. \ref{normalized-filterbanks}.
+
+  \begin{figure}[H]
+    \centering
+    \includegraphics[scale=0.3]{normalized_filterbanks.png}
+    \caption{Normalized Mel-Filterbanks.\cite{fayek2016}}
+    \label{normalized-filterbanks}
+  \end{figure}
+
+\end{enumerate}
+
+In Section~\ref{torchaudio} we will use the \textit{Torchaudio} module from the Pytorch Library to extract the Mel-Filterbank features from the dataset.

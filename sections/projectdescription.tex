@@ -1,0 +1,37 @@
+% correcte VD 87
+
+\section{Project description}
+\subsection{Domains}
+
+\begin{itemize}
+  \item Speech Recognition
+  \item Artificial Neural Networks
+  \item Deep Learning 
+  \item Feature extraction
+  \item Training, validation and testing set
+  \item Python
+  \item Pytorch
+  \item HPC developement environment
+\end{itemize}
+
+\subsubsection{Scientific}
+
+The scientific aspects covered by this Bachelor Semester Project are the concepts of Speech Recognition and Deep Learning. The Listen, Attend and Spell (LAS) model's architecture will be investigated for the end-to-end automatic speech recognition task.\\
+
+\textbf{Speech Recognition.} The objective of speech recognition is to map audio signals which contain a set of spoken natural language expressions to the matching sequence of words produced by the speaker. In the past, Automatic Speech Recognition (ASR) was made up of different modules such as complex feature extraction, acoustic models, language and pronunciation models.~\cite{DBLP:journals/corr/AmodeiABCCCCCCD15} Sequential models, such as Hidden Markov Models (HMM), in combination with a pre-trained language model, were used to map sequences of phones to output words.~\cite{Williamsong} A different approach is to build ASR models end-to-end. With deep learning, it replaces most of the modules with a single module. This alternative method is the main task of this report, focusing on a sequence to sequence model with attention mechanisms to create an end-to-end ASR pipeline.\\
+
+\textbf{Artificial Neural Networks (ANN).} ANNs are computing systems inspired by the biological brain. These systems are based on a set of connected units called artificial neurons. Each connection can transmit \textit{signals} between units. A unit can process the signal and transmit it to another unit.\\
+
+\textbf{Deep Learning.} This field deals with learning patterns by decomposing a task's input into smaller and simpler compositions. With Deep Learning, computing systems can build complex concepts from a composition of simpler concepts.
+
+\subsubsection{Technical} The technological aspects which are covered in this project are feature extraction, reusing an existing implementation of an attention-based sequence-to-sequence ASR model and benchmarking its performance using different configurations and hyperparameters.\\
+
+\textbf{Feature extraction.} Data preprocessing is an important phase in machine learning. It ensures the quality of the gathered data by eliminating irrelevant and redundant information. Data preprocessing contains tasks such as cleaning, instance selection, normalization, feature extraction and feature selection. We will focus on feature extraction in this paper with the presentation of Mel filterbanks in Section \ref{fbank} which are used as features extracted from a speech signal.\\
+
+\textbf{Training, validation and testing set.} For a computing system to learn from and make predictions on data, a mathematical model is built from input data. This input data used to create the model consists of three datasets: The training, validation and testing set. The training set contains pairs of an input vector, which represent features and an output vector often called the labels. With the training set, the model learns to map the input vector to the labels. Further, the validation set serves for tuning the hyperparameters of the model, whereas the testing set evaluates how well the model generalizes the prediction over the dataset previously not seen by the model.\\
+
+\textbf{Python.} This is a programming language which is interpreted, high-level and general-purpose.\cite{Python}\\
+
+\textbf{Pytorch.} This library is a Python package which provides high-level features such as GPU accelerated Tensor computation and building Deep neural networks on a tape-based autograd system. It is designed for easy-to-use and efficient experimentation with Deep Learning through a user-friendly front-end.\cite{NEURIPS2019_9015}\\
+
+\textbf{HPC environment.} High-performance computing (HPC) is the capability to process and compute large amounts of data at a fast pace. Implementations of HPC are often referred to as \textit{supercomputers} which consists of many connected computing servers called \textit{nodes}. These nodes work in parallel to compute tasks faster.\cite{hpc}
