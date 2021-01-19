@@ -1,8 +1,8 @@
 \subsubsection{NFR01: Performance evaluation and comparison}~\label{las_assessment} % corrected LN 89
 
-In this section, the performance of the LAS architecture will be evaluated. For this analysis study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formatted files. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Additionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}\\
+In this section, the performance of the LAS architecture \sout{will be} \textcolor{red}{is} evaluated. For this \sout{analysis} study, we use 460h of the roughly 1000h LibriSpeech audio corpus which contains read English speech. It contains 132553 examples of varying lengths, sampled at $16kHz$ and saved as FLAC formatted files. This dataset represents 772 speakers reading the different sentences. The data is gathered from read audiobooks from the LibriVox project. Additionally, these readings were segmented and aligned into example sentences.\cite{panayotov2015librispeech}\\
 
-First of all, we define a couple of configurations which will set up the hyperparameters of the LAS model to perform different experiments:
+First of all, we define a couple of configurations which \sout{will} set up the hyperparameters of the LAS model to perform different experiments:
 
 \begin{itemize}
 	\item Non-pyramidal encoder
@@ -11,11 +11,11 @@ First of all, we define a couple of configurations which will set up the hyperpa
 
 \subsubsection{LAS model with non-pyramidal encoder}
 
-In this experiment, we will train multiple LAS models without the encoder having a pyramidal form. The hyperparameters for this model look as follows:
+In this experiment, we \sout{will} train multiple LAS models without the encoder having a pyramidal form. The hyperparameters for this model look as follows:
 
 \lstinputlisting{sections/scientific/nfr1/non_pyramidal_encoder_config.yaml}
 
-The model's encoder is configured with 5 BLSTM layers each composed of 512 units. No dropout is applied to the output of the encoder. The attention mechanism is based on location awareness and contains 300 units.\cite{chorowski2015attentionbased} Further, the decoder includes 1 LSTM layer of 512 units. The model uses the \textit{Adadelta} optimizer which is a stochastic gradient descent method. It is set up to train until $1000001 \ steps$ and validates the model at each $5000 \ steps$ intervals. Although, the training of the model stops earlier before $1000001 \ steps$ since the runtime on the HPC is restricted to 2 days.\\
+The model's encoder is configured with 5 BLSTM layers each composed of 512 units. No dropout is applied to the output of the encoder. The attention mechanism is based on location awareness and contains 300 units.\cite{chorowski2015attentionbased} Further, the decoder includes 1 LSTM layer of 512 units. The model uses the \textit{Adadelta} optimizer which is a stochastic gradient descent method. It is set up to train until $1000001 \ steps$ and validates the model at each $5000 \ steps$ intervals. \sout{Although} \textcolor{red}{However}, the training of the model stops \sout{earlier} before \textcolor{red}{reaching} $1000001 \ steps$ since the runtime on the HPC is restricted to 2 days.\\
 
 For this configuration, we investigate 4 different experiments:
 
@@ -34,7 +34,7 @@ For this configuration, we investigate 4 different experiments:
 
 \paragraph{100h: Predicting characters}
 
-In this experiment, we train the model on 100h of the LibriSpeech corpus to learn predicting characters from the acoustic features without a word dictionary. The training visualization is illustrated in Fig. \ref{100_chars}. The model was able to reduce the loss during training and the loss converges to zero. The Word Error Rate (WER) metric is used as a performance measure. The WER is derived from the Levenshtein distance which computes the difference between two string sequences. During training, the model achieves a WER close to 0\%. Whereas, during validation the LAS model reaches a 24\% WER.
+In this experiment, we train the model on 100h of the LibriSpeech corpus to learn predicting characters from the acoustic features without a word dictionary. The training visualization is illustrated in Fig. \ref{100_chars}. The model was able to reduce the loss during training and the loss converges to zero. The Word Error Rate (WER) metric is used as a performance measure. The WER is derived from the Levenshtein distance which computes the difference between two string sequences. During training, the model achieves a WER close to 0\%\textcolor{red}{, w}hereas, during validation the LAS model reaches a 24\% WER.
 
 \begin{figure}[H]
   \centering
@@ -58,7 +58,7 @@ When evaluating the model on the testing dataset from the LibriSpeech corpus, wh
 
 \paragraph{100h: Predicting characters with a word dictionary}
 
-The same configured model was trained on 100h of training data but it uses a word dictionary to constrain the search space to valid words when decoding. The training visualization is illustrated in Fig. \ref{100_words}. The model achieves a validation WER of 25\%. When evaluating the model on the same testing dataset, it achieves a testing WER of 25.1\% as seen in Table \ref{table:test_100_words}. The result shows that a word dictionary is not necessary when decoding the output of the model since the model is able to learn spelling real words right most of the time.
+The same configured model was trained on 100h of training data\textcolor{red}{,} but it uses a word dictionary to constrain the search space to valid words when decoding. The training visualization is illustrated in Fig. \ref{100_words}. The model achieves a validation WER of 25\%. When evaluating the model on the same testing dataset, it achieves a testing WER of 25.1\% as seen in Table \ref{table:test_100_words}. The result shows that a word dictionary is not necessary when decoding the output of the model since the model is able to learn spelling real words \sout{right} \textcolor{red}{correctly} most of the time.
 
 \begin{figure}[ht]
   \centering
@@ -178,7 +178,7 @@ The attention alignment of the audio signal of a validation utterance is visuali
 
 \subsubsection{Performance comparison}
 
-Looking at the results of other speech recognition models in Table \ref{table:result_comparison}, our experiments with the LAS model didn't perform as well as others. An explanation for the higher error rate is that we did not train our model with the entire LibriSpeech dataset.
+Looking at the results of other speech recognition models in Table \ref{table:result_comparison}, our experiments with the LAS model didn't perform as well as other \textcolor{red}{reported in the literature}. \textcolor{red}{The reason for this might be the fact that the model was trained only on the subset of LibriSpeech dataset.} \sout{An explanation for the higher error rate is that we did not train our model with the entire LibriSpeech dataset}.
 
 \begin{table}[ht]
 		\centering
