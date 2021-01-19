@@ -13,8 +13,7 @@ To run the LAS model in training mode, the launcher script executes the followin
 \begin{lstlisting}
 $ python3 main.py --config $config_file --logdir $log_dir --name $model_name
 \end{lstlisting}
-
-where \textit{\$config\_file} is the file defining the model's hyperparameters, \textit{\$log\_dir} is the directory name for logging the tensorboard data and \textit{\$model\_name} is the name under which a checkpoint of the model will be made.\\
+where \textit{\$config\_file} is the file defining the model's hyperparameters, \textit{\$log\_dir} is the directory name for logging the tensorboard data and \textit{\$model\_name} is the name under which a checkpoint of the model \sout{will be} \textcolor{red}{is} made.\\
 
 To submit our application to the queue for execution, we run the following command in the HPC user shell which schedules the SLURM job launcher:
 
