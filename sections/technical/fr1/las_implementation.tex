@@ -1,24 +1,24 @@
-% corrected LN 99
+% corrected VD 99
 
 \subsubsection{FR01: Presentation of an existing LAS implementation.}
 
-In this section, the \textcolor{red}{PyTorch implementation of the }LAS \sout{implementation} end-to-end \sout{Automatic Speech Recognition Systems - PyTorch Implementation} \cite{alex2019sequencetosequence} \sout{will be} \textcolor{red}{ASR system is} presented. The main entry of this implementation is the \textit{main.py} program:
+In this section, the PyTorch implementation of the LAS end-to-end\cite{alex2019sequencetosequence} ASR system is presented. The main entry of this implementation is the \textit{main.py} program:
 
 \lstinputlisting{sections/technical/fr1/las_main.py}
 
-\sout{For this presentation, the \textit{train} mode of the application will be focused on.} The \textit{main.py} imports the class \textit{Solver} from \textit{bin.train\_asr} while being in the training mode. \sout{On line 20, a}\textcolor{red}{A}n instance of the Solver class is created with the hyperparameters and training mode as arguments \textcolor{red}{(line 20)}. This object loads the training and validation set \sout{on line 21} with the \textit{load\_data()} method  \textcolor{red}{(line 21)}. The object initialises a model with the defined hyperparameters \sout{on line 22} with the \textit{set\_model()} method \textcolor{red}{(line 22)} and executes its training \sout{on line 23} with the method \textit{exec()} \textcolor{red}{(line 23)}.\\
+The \textit{main.py} imports the class \textit{Solver} from \textit{bin.train\_asr} while being in the training mode. An instance of the Solver class is created with the hyperparameters and training mode as arguments line 20). This object loads the training and validation set with the \textit{load\_data()} method (line 21). The object initialises a model with the defined hyperparameters with the \textit{set\_model()} method (line 22) and executes its training with the method \textit{exec()} (line 23).\\
 
-In the following listing, the method \textit{load\_data()} \sout{will be} \textcolor{red}{is} shown:
+In the following listing, the method \textit{load\_data()} is shown:
 
 \lstinputlisting{sections/technical/fr1/las_load_data.py}
 
-The function \textit{load\_dataset()} \sout{on line 3,}  uses PyTorch's DataLoader interface which is an utility to customize loading of datasets \textcolor{red}{(line 3)}. This function parses the LibriSpeech dataset\textcolor{red}{,} \sout{and} extracts the Mel-filterbanks\sout{. It} \textcolor{red}{and} outputs \{sout{then} the training \sout{set} and the validation set\textcolor{red}{s} \sout{each} divided into batches.\\
+The function \textit{load\_dataset()} uses PyTorch's DataLoader interface which is an utility to customize loading of datasets (line 3). This function parses the LibriSpeech dataset, extracts the Mel-filterbanks and outputs the training and the validation sets divided into batches.\\
 
-The following listing showcases the \textit{set\_model()} method\textcolor{red}{, which initialises the \textit{Adadelta} optimizer, creates an \textit{ASR()} instance for the \textit{self.model} attribute and asigns the \textit{CrossEntropyLoss} as the loss function}.}
+The following listing showcases the \textit{set\_model()} method, which initialises the \textit{Adadelta} optimizer, creates an \textit{ASR()} instance for the \textit{self.model} attribute and asigns the \textit{CrossEntropyLoss} as the loss function.
 
 \lstinputlisting{sections/technical/fr1/las_set_model.py}
 
-\sout{This function initialises the \textit{Adadelta} optimizer and creates an \textit{ASR()} instance for the \textit{self.model} attribute. On line 9, it asigns the the \textit{CrossEntropyLoss} as the loss function}. The \textit{ASR()} class is defined as follows:
+The \textit{ASR()} class is defined as follows:
 
 \lstinputlisting{sections/technical/fr1/las_asr_class.py}
 
@@ -28,4 +28,4 @@ The \textit{exec()} method is defined as follows:
 
 \lstinputlisting{sections/technical/fr1/las_exec.py}
 
-This function trains the model initialized in the previous steps. \sout{On line 5 and 6, the function iterates over the number of training steps and data batches.} The model passes the input data forward through the network with the method \textit{self.model()}\sout{. The model }\textcolor{red}{, }propagates the losses back with the method \textit{self.backward(total\_loss)} and increments the number of steps by one. The function calls the methods \textit{self.log()} and \textit{self.validate()} to log the current training state and validate the model's performance respectively.
+This function trains the model initialized in the previous steps. The model passes the input data forward through the network with the method \textit{self.model()}, propagates the losses back with the method \textit{self.backward(total\_loss)} and increments the number of steps by one. The function calls the methods \textit{self.log()} and \textit{self.validate()} to log the current training state and validate the model's performance respectively.
