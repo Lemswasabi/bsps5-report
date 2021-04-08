@@ -5,7 +5,7 @@
 We use the Pytorch module \textit{Torchaudio}\cite{torchaudio} to extract the Mel Filterbanks from the dataset. Instead of processing the whole dataset, the following steps are applied to one single audio file $f$:\\
 
 \begin{enumerate}[label=\arabic*.]
-  \item Let $f$ be an audio file sampled at $16kHz$, \textit{Torchaudio} loads the song as follows:
+  \item Let $f$ be an audio file sampled at $16kHz$, \textit{Torchaudio} loads the audio file as follows:
 \begin{lstlisting}
 import torchaudio
 import torchaudio.compliance.kaldi.fbank as fbank

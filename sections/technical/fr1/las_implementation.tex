@@ -6,7 +6,7 @@ In this section, the PyTorch implementation of the LAS end-to-end\cite{alex2019s
 
 \lstinputlisting{sections/technical/fr1/las_main.py}
 
-The \textit{main.py} imports the class \textit{Solver} from \textit{bin.train\_asr} while being in the training mode. An instance of the Solver class is created with the hyperparameters and training mode as arguments line 20). This object loads the training and validation set with the \textit{load\_data()} method (line 21). The object initialises a model with the defined hyperparameters with the \textit{set\_model()} method (line 22) and executes its training with the method \textit{exec()} (line 23).\\
+The \textit{main.py} imports the class \textit{Solver} from \textit{bin.train\_asr} while being in the training mode. An instance of the Solver class is created with the hyperparameters and training mode as arguments (line 20). This object loads the training and validation set with the \textit{load\_data()} method (line 21). The object initialises a model with the defined hyperparameters with the \textit{set\_model()} method (line 22) and executes its training with the method \textit{exec()} (line 23).\\
 
 In the following listing, the method \textit{load\_data()} is shown:
 
@@ -14,7 +14,7 @@ In the following listing, the method \textit{load\_data()} is shown:
 
 The function \textit{load\_dataset()} uses PyTorch's DataLoader interface which is an utility to customize loading of datasets (line 3). This function parses the LibriSpeech dataset, extracts the Mel-filterbanks and outputs the training and the validation sets divided into batches.\\
 
-The following listing showcases the \textit{set\_model()} method, which initialises the \textit{Adadelta} optimizer, creates an \textit{ASR()} instance for the \textit{self.model} attribute and asigns the \textit{CrossEntropyLoss} as the loss function.
+The following listing showcases the \textit{set\_model()} method, which initialises the \textit{Adadelta} optimizer, creates an \textit{ASR()} instance for the \textit{self.model} attribute and assigns the \textit{CrossEntropyLoss} as the loss function.
 
 \lstinputlisting{sections/technical/fr1/las_set_model.py}
 

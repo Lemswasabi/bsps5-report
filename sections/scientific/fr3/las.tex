@@ -115,7 +115,7 @@ During inference, the expected results are not available. Thus the predictions o
 	\max_\theta \sum_i log P(y_i|x,\tilde{y}_{<i};\theta)
 \end{equation}
 %
-where $\tilde{y_{i-1}}$ is the ground truth character or a character sampled from the model.
+where $\tilde{y}_{i-1}$ is the ground truth character or a character sampled from the model.
 
 \paragraph{Decoding} % corrected 86
 
@@ -125,4 +125,4 @@ During inference the LAS model finds the most probable character sequence given 
 	\hat{y} = arg \max_{y} log P(y|x)
 \end{equation}
 
-A left-to-right beam search algorithm is used to perform decoding. A set of $\beta$ incomplete hypothesis is initialized each starting with the start-of-sentence $\langle sos \rangle$ token. Each hypothesis in the beam is expanded at each time step with every possible character. Only the $\beta$ most probable beams are retained. When reaching the end-of-sentence $\langle sos \rangle$ token, the candidate is removed from the beam and placed to the completed hypothesis. A word dictionary can be added to the decoding phase. However, as observed from the experiments in section \ref{las_assessment}, this is not necessary because the LAS model learns to spell real words most of the time.
+A left-to-right beam search algorithm is used to perform decoding. A set of $\beta$ incomplete hypothesis is initialized each starting with the start-of-sentence $\langle sos \rangle$ token. Each hypothesis in the beam is expanded at each time step with every possible character. Only the $\beta$ most probable beams are retained. When reaching the end-of-sentence $\langle eos \rangle$ token, the candidate is removed from the beam and placed to the completed hypothesis. A word dictionary can be added to the decoding phase. However, as observed from the experiments in section \ref{las_assessment}, this is not necessary because the LAS model learns to spell real words most of the time.
